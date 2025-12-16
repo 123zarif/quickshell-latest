@@ -7,10 +7,14 @@ import QtQuick.Controls
 Item{
     id: playback
 
-    Layout.fillWidth: true
+
+    property int pos: 0
+    property int crrPos: 0
+    property bool stopUpdating: false
+
+
+    width: parent.width
     height: 40
-
-
 
 
     FrameAnimation {
@@ -23,6 +27,19 @@ Item{
         repeat: true
         onTriggered: {
             player.positionChanged()
+            if (!stopUpdating) crrPos = player.position
+        }
+    }
+
+    Timer {
+        id: graceTimerPosition
+        interval: 200
+        running: false
+        repeat: false
+        onTriggered: {
+            player.position = pos
+            crrPos = pos
+            stopUpdating = false
         }
     }
 
@@ -35,17 +52,18 @@ Item{
         RowLayout {
             width: parent.width
             Text {
+                Layout.fillWidth: true
                 text: Math.floor(player.position/60).toString().padStart(2, '0') + ": " + Math.floor(player.position%60).toString().padStart(2, '0') + " / " + Math.round(player.length/60).toString().padStart(2, '0') + ": " + Math.round(player.length%60 ).toString().padStart(2, '0')
                 font.pixelSize: 14
                 font.family: root.font_family
-                color: "#D3D2D2"
+                color: secondary
                 font.bold: true
             }
             Text {
                 text: "-" + Math.floor((player.length - player.position)/60).toString().padStart(2, '0') + ": " + Math.floor((player.length - player.position)%60).toString().padStart(2, '0')
                 font.pixelSize: 14
                 font.family: root.font_family
-                color: "#D3D2D2"
+                color: secondary
                 font.bold: true
                 Layout.alignment: Qt.AlignRight
             }
@@ -58,7 +76,39 @@ Item{
 
             from: 0
             to: player.length
-            value: player.position
+            value: crrPos
+
+
+
+            onMoved: {
+                graceTimerPosition.stop()
+                stopUpdating = true
+
+                pos = value
+                graceTimerPosition.start()
+            }
+
+            hoverEnabled: true
+
+            MouseArea {
+                anchors.fill: parent
+                hoverEnabled: true
+                acceptedButtons: Qt.NoButton
+                cursorShape: Qt.PointingHandCursor
+
+
+                onEntered: {
+                    sliderHovering = true
+
+                    graceTimer.start()
+                }
+                onExited: {
+                    sliderHovering = false
+                }
+            }
+
+
+
 
             background: Rectangle {
                 color: '#908484'

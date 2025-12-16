@@ -2,57 +2,148 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Services.Mpris
+import Qt5Compat.GraphicalEffects
+
 
 PopupWindow {
-
-    property var player: null
-
-
+    id: spotifyPopup
     anchor.window: root
-    anchor.rect.x: 193
+    property Item popupAnchor: null
+
+    anchor.rect.x: popupAnchor.x + 15
     anchor.rect.y: root.height - 10
+
     implicitWidth: 500
     implicitHeight: 400
-    visible: hoverItem.containsMouse ? true: false
+    visible: showWidget || widgetBackground.opacity > 0
 
-    color: secondary
+    property var player: null
+    color: "transparent"
+    Rectangle {
+        id: widgetBackground
 
-    Image {
-        anchors.fill: parent
-        source: player?.trackArtUrl
-        fillMode: Image.Tile
-        smooth: true
+        opacity: showWidget ? 1: 0
+        Behavior on opacity {
+        NumberAnimation {
+            duration: 350
+        }
     }
+
+    anchors.fill: parent
+
+    topRightRadius: 50
+    topLeftRadius: 0
+    bottomRightRadius: 50
+    bottomLeftRadius: 50
+
+    clip: true
+    color: "transparent"
+
+    MouseArea {
+        id: hoverItemWidget
+        anchors.fill: parent
+        hoverEnabled: true
+
+        onEntered: {
+            widgetHovering = true
+
+            graceTimer.start()
+        }
+        onExited: {
+            widgetHovering = false
+
+            graceTimer.start()
+        }
+
+    }
+
+
+    Item {
+        anchors.fill: parent
+
+
+        Image {
+            id: albumArt
+            anchors.fill: parent
+            source: player?.trackArtUrl ?? ""
+            fillMode: Image.PreserveAspectCrop
+            smooth: true
+            visible: false
+        }
+
+        Rectangle {
+            id: maskRect
+            anchors.fill: parent
+            topRightRadius: widgetBackground.topRightRadius
+            topLeftRadius: widgetBackground.topLeftRadius
+            bottomRightRadius: widgetBackground.bottomRightRadius
+            bottomLeftRadius: widgetBackground.bottomLeftRadius
+
+            visible: false
+        }
+
+        OpacityMask {
+            anchors.fill: parent
+            source: albumArt
+            maskSource: maskRect
+        }
+    }
+    // Image {
+    //     anchors.fill: parent
+    //     source: player?.trackArtUrl
+    //     fillMode: Image.Tile
+    //     smooth: true
+    // }
+
 
     Rectangle {
         anchors.fill: parent
         color: "#221E1E"
         opacity: 0.6
+        topRightRadius: widgetBackground.topRightRadius
+        topLeftRadius: widgetBackground.topLeftRadius
+        bottomRightRadius: widgetBackground.bottomRightRadius
+        bottomLeftRadius: widgetBackground.bottomLeftRadius
     }
-    Rectangle {
+
+    Item {
         anchors.fill: parent
-        color: "transparent"
-        ColumnLayout {
-            anchors.fill: parent
-            anchors.margins: 20
-            Song_Details {}
+        anchors.margins: 20
+        Song_Details {}
 
-            ColumnLayout {
-                Layout.fillWidth: true
-                height: playback.height + 30
+        ColumnLayout{
+            anchors.bottom: parent.bottom
+            width: parent.width
+            height: childrenRect.height
 
-                Layout.alignment: Qt.AlignBottom
+            spacing: 20
 
-                Position_Controller {}
+            Position_Controller {}
 
-                RowLayout {
-                    Layout.fillWidth: true
-                    height: 30
+            RowLayout {
+                Layout.alignment: Qt.AlignHCenter
 
+                spacing: 20
+
+                PlayStateControlButton {
+                    type: 1
+                    icon_name: "media-skip-backward"
+                }
+                PlayStateControlButton {
+                    type: 2
+                    icon_name: player.isPlaying ? "media-pause": "media-play"
 
                 }
+                PlayStateControlButton {
+                    type: 3
+                    icon_name: "media-skip-forward"
+                }
             }
-
         }
+
+
     }
+
+}
+
 }

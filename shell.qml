@@ -18,8 +18,8 @@ PanelWindow {
     property color active: '#55df46'
 
 
-    property double memUsed: 0
-    property double memTotal: 1
+    property double memUsed: 0.1
+    property double memTotal: 1.1
     property int memPercent: 0
 
     property int lastCpuIdle: 0

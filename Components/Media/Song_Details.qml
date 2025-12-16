@@ -4,7 +4,7 @@ import Quickshell
 
 
 Rectangle{
-    Layout.alignment: Qt.AlignTop
+    anchors.top: parent.top
     width: trackTitle.width > trackArtist.width ? trackTitle.width + 40: trackArtist.width + 40
     height: trackTitle.height + trackArtist.height + 30
     radius: 20
@@ -20,7 +20,7 @@ Rectangle{
             color: secondary
             font.bold: true
             font.pointSize: 14
-            maximumLineCount: 1
+
         }
 
         Text {
@@ -29,7 +29,6 @@ Rectangle{
             color: secondary
             opacity: 0.7
             font.pointSize: 12
-            maximumLineCount: 1
         }
     }
 }

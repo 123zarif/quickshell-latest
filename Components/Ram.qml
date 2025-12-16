@@ -7,7 +7,7 @@ Rectangle {
     id: ramContainer
 
 
-    Layout.preferredWidth: hoverArea.containsMouse ? ramPercentage.width + ramDetails.width + 30: ramDetails.width
+    Layout.preferredWidth: hoverArea.containsMouse ? ramPercentage.width + ramDetails.width + 30: ramDetails.width - 10
     Layout.fillHeight: true
 
     color: secondary
@@ -25,7 +25,6 @@ Rectangle {
     }
 
     RowLayout {
-        anchors.left: parent.left
         anchors.verticalCenter: parent.verticalCenter
         spacing: 10
 
@@ -34,7 +33,7 @@ Rectangle {
 
             Layout.leftMargin: 10
             Layout.alignment: Qt.AlignVCenter
-            text: "RAM: " + memPercent + "%"
+            text: "RAM: " + memPercent.toString().padStart(2, '0') + "%"
             font.pixelSize: 13
             font.family: font_family
             color: primary
@@ -43,8 +42,7 @@ Rectangle {
 
         Text {
             id: ramDetails
-
-            Layout.alignment: Qt.AlignVCenter
+            Layout.rightMargin: 10
             text: memUsed.toString() + "GiB / " + memTotal + "GiB"
             font.pixelSize: 13
             font.family: font_family
