@@ -4,12 +4,20 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
-import Quickshell.Wayland
-
+import Quickshell.Hyprland
 
 
 PanelWindow {
     id: root
+    implicitHeight: 50
+
+    color: "transparent"
+
+    anchors {
+        top: true
+        left: true
+        right: true
+    }
 
     property string font_family: "Helvetica"
     property color primary: "#221E1E"
@@ -27,7 +35,8 @@ PanelWindow {
     property int cpuPercent: 0
 
 
-
+    property bool systemWidgetVisible: false
+    property bool launcherWidgetVisible: false
 
 
     Process {
@@ -84,15 +93,35 @@ Timer {
 }
 
 
+GlobalShortcut {
+    name: "system_widget"
+    description: "Toggles the system widget"
+    onPressed: {
+        systemWidgetVisible = !systemWidgetVisible
+    }
+}
 
-implicitHeight: 50
+GlobalShortcut {
+    name: "launcher_widget"
+    description: "Toggles the launcher widget"
+    onPressed: {
+        launcherWidgetVisible = !launcherWidgetVisible
+    }
+}
 
-color: "transparent"
 
-anchors {
-    top: true
-    left: true
-    right: true
+Item {
+    id: widgets
+    LazyLoader {
+        loading: false
+        active: systemWidgetVisible
+        System_Widgets {}
+    }
+    LazyLoader {
+        loading: false
+        active: launcherWidgetVisible
+        Launcher_Widget {}
+    }
 }
 
 RowLayout {
@@ -116,6 +145,21 @@ RowLayout {
                 id: arch
                 name: "distributor-logo-archman"
                 iconColor: secondary
+
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: {
+                        if (systemWidgetVisible === false)
+                        {
+                            systemWidgetVisible = true
+                        }
+                        else if(systemWidgetVisible === true)
+                        {
+                            systemWidgetVisible = false
+                        }
+                    }
+                }
             }
             Time { }
             Media { }

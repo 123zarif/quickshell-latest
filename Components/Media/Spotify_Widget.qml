@@ -88,13 +88,6 @@ PopupWindow {
             maskSource: maskRect
         }
     }
-    // Image {
-    //     anchors.fill: parent
-    //     source: player?.trackArtUrl
-    //     fillMode: Image.Tile
-    //     smooth: true
-    // }
-
 
     Rectangle {
         anchors.fill: parent

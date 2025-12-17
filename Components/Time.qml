@@ -36,7 +36,7 @@ Rectangle {
 
             Layout.leftMargin: 10
             Layout.alignment: Qt.AlignVCenter
-            text: Qt.formatDateTime(clock.date, "hh: mm AP | dddd")
+            text: Qt.formatDateTime(clock.date, "hh:mm AP | dddd")
             font.pixelSize: 13
             font.family: font_family
             color: primary

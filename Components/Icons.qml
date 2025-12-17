@@ -12,6 +12,7 @@ Rectangle {
     property int size: 15
 
     width: size
+    height: size
     color: "transparent"
 
     IconImage {
