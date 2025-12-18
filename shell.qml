@@ -5,6 +5,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
+import Quickshell.Wayland
 
 
 PanelWindow {
@@ -12,6 +13,9 @@ PanelWindow {
     implicitHeight: 50
 
     color: "transparent"
+
+    WlrLayershell.layer: WlrLayer.Bottom
+
 
     anchors {
         top: true

@@ -12,36 +12,54 @@ import Quickshell.Wayland
 FloatingWindow{
     id: laucnherPopup
     title: "launcher"
-    minimumSize: "1000x600"
-    maximumSize: "1000x600"
     visible: true
-    color: "transparent"
+    color: '#24000000'
+    minimumSize: Qt.size(screen.width, screen.height)
+    maximumSize: Qt.size(screen.width, screen.height)
+
+    property string crrText: ""
+
+    Timer {
+        interval: 100
+        running: true
+        repeat: false
+        onTriggered: {
+            main.visible = true
+            searchField.forceActiveFocus()
+        }
+    }
 
 
     Rectangle{
+        id: main
         anchors.centerIn: parent
-        width: parent.width
-        height: parent.height
-        color: '#9c000000'
+        width: 1000
+        height: 600
+        color: '#a6000000'
+        radius: 40
+        visible: false
 
         Rectangle{
             anchors.centerIn: parent
             color: "transparent"
-            width: parent.width - 50
-            height: parent.height - 30
+            width: parent.width - 70
+            height: parent.height - 50
 
             ColumnLayout {
                 width: parent.width
                 height: parent.height
-                spacing: 10
+                spacing: 30
 
                 TextField {
                     id: searchField
                     Layout.fillWidth: true
-                    height: 10
-                    font.pixelSize: 24
+                    height: 15
+                    font.pixelSize: 20
                     leftInset: -10
+                    bottomInset: -5
+                    topInset: -5
                     color: "#fff"
+
                     placeholderText: "Search applications..."
                     placeholderTextColor: '#b2b2b2'
                     background: Rectangle {
@@ -49,6 +67,10 @@ FloatingWindow{
                         border.color: "#fff"
                         border.width: 2
                         radius: 5
+                    }
+
+                    onTextChanged: {
+                        crrText = text
                     }
                 }
 
@@ -62,15 +84,35 @@ FloatingWindow{
                         width: scrollView.availableWidth
                         height: parent.height
                         columns: 3
-                        rowSpacing: 10
+                        rowSpacing: 25
                         columnSpacing: 10
 
                         Repeater {
                             model: DesktopEntries.applications
+
+                            Item {
+                                width: grid.width / grid.columns - grid.columnSpacing * (grid.columns - 1)
+                                height: 140
+                                visible: modelData.name.toLowerCase().includes(crrText.toLowerCase())
+
+                                Rectangle {
+                                    color: mouseArea.containsMouse ? '#fff': "transparent"
+                                    opacity: mouseArea.containsMouse ? 0.15: 0
+                                    width: parent.width
+                                    height: parent.height
+
+                                    Behavior on opacity {
+                                    NumberAnimation {
+                                        duration: 300
+                                        easing.type: Easing.InOutQuad
+                                    }
+                                }
+
+                            }
                             Rectangle {
-                                color: mouseArea.containsMouse ? '#1dffffff': "transparent"
-                                height: 150
-                                Layout.fillWidth: true
+                                color: "transparent"
+                                width: parent.width
+                                height: parent.height
 
                                 MouseArea {
                                     id: mouseArea
@@ -86,27 +128,48 @@ FloatingWindow{
 
                                 ColumnLayout{
                                     id: column
-                                    spacing: 1
+                                    spacing: 0
                                     anchors.fill: parent
                                     anchors.centerIn: parent
+
                                     IconImage {
                                         Layout.alignment: Qt.AlignCenter | Qt.AlignVCenter
-                                        implicitSize: 64
+                                        implicitSize: mouseArea.containsMouse ? 85: 60
                                         source: Quickshell.iconPath(modelData.icon)
+
+                                        Behavior on implicitSize {
+                                        NumberAnimation {
+                                            duration: 150
+                                            easing.type: Easing.InOutQuad
+                                        }
                                     }
-                                    Text {
-                                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                                        text: modelData.name
-                                        color: "#fff"
-                                        font.pixelSize: 20
+                                }
+                                Text {
+                                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                                    Layout.fillWidth: true
+                                    Layout.margins: 5
+                                    horizontalAlignment: Text.AlignHCenter
+                                    text: modelData.name
+                                    elide: Text.ElideRight
+                                    color: "#fff"
+                                    font.weight: 700
+                                    font.pixelSize: mouseArea.containsMouse ? 22: 20
+
+                                    Behavior on font.pixelSize {
+                                    NumberAnimation {
+                                        duration: 150
+                                        easing.type: Easing.InOutQuad
                                     }
                                 }
                             }
                         }
                     }
                 }
-
             }
         }
     }
+
+}
+}
+}
 }
