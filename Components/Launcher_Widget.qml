@@ -8,8 +8,10 @@ import Quickshell.Hyprland
 import Quickshell.Wayland
 
 
-
 FloatingWindow{
+    property string crrText: ""
+    property int selectedIndex: 0
+
     id: laucnherPopup
     title: "launcher"
     visible: true
@@ -17,15 +19,14 @@ FloatingWindow{
     minimumSize: Qt.size(screen.width, screen.height)
     maximumSize: Qt.size(screen.width, screen.height)
 
-    property string crrText: ""
 
     Timer {
-        interval: 100
+        interval: 10
         running: true
         repeat: false
         onTriggered: {
             main.visible = true
-            searchField.forceActiveFocus()
+            main.opacity = 1
         }
     }
 
@@ -38,22 +39,56 @@ FloatingWindow{
         color: '#a6000000'
         radius: 40
         visible: false
+        opacity: 0
 
-        Rectangle{
-            anchors.centerIn: parent
-            color: "transparent"
-            width: parent.width - 70
-            height: parent.height - 50
+        Behavior on opacity {
+        NumberAnimation {
+            duration: 300
+            easing.type: Easing.InQuad
+        }
+    }
 
-            ColumnLayout {
-                width: parent.width
-                height: parent.height
-                spacing: 30
+
+    Rectangle{
+        id: inside
+        anchors.centerIn: parent
+        color: "transparent"
+        width: parent.width - 70
+        height: parent.height - 50
+        visible: !(main.height < 600 && main.width < 1000)
+
+        ColumnLayout {
+            width: parent.width
+            height: parent.height
+            spacing: 30
+            FocusScope {
+                focus: true
+                Layout.fillWidth: true
+                height: 30
 
                 TextField {
                     id: searchField
-                    Layout.fillWidth: true
-                    height: 15
+                    Keys.onUpPressed: {
+                        if (selectedIndex - 3 >= 0) selectedIndex -= 3
+                    }
+                    Keys.onDownPressed: {
+                        if (selectedIndex + 3 < DesktopEntries.applications.values.length) selectedIndex += 3
+                    }
+                    Keys.onLeftPressed: {
+                        if (selectedIndex > 0) selectedIndex -= 1
+                    }
+                    Keys.onRightPressed: {
+                        if (selectedIndex + 1 < DesktopEntries.applications.values.length ) selectedIndex += 1
+                    }
+                    Keys.onReturnPressed: {
+                        if (DesktopEntries.applications.values.length > 0)
+                        {
+                            launcherWidgetVisible = false
+                            DesktopEntries.applications.values.filter(itm => itm.name.toLowerCase().includes(crrText.toLowerCase()))[selectedIndex].execute()
+                        }
+                    }
+                    focus: true
+                    anchors.fill: parent
                     font.pixelSize: 20
                     leftInset: -10
                     bottomInset: -5
@@ -70,96 +105,98 @@ FloatingWindow{
                     }
 
                     onTextChanged: {
+                        selectedIndex = 0
                         crrText = text
                     }
                 }
+            }
 
-                ScrollView {
-                    id: scrollView
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
+            ScrollView {
+                id: scrollView
+                Layout.fillWidth: true
+                Layout.fillHeight: true
 
-                    GridLayout{
-                        id: grid
-                        width: scrollView.availableWidth
-                        height: parent.height
-                        columns: 3
-                        rowSpacing: 25
-                        columnSpacing: 10
+                GridLayout{
+                    id: grid
+                    width: scrollView.availableWidth
+                    height: parent.height
+                    columns: 3
+                    rowSpacing: 25
+                    columnSpacing: 10
 
-                        Repeater {
-                            model: DesktopEntries.applications
+                    Repeater {
+                        model: DesktopEntries.applications.values.filter(itm => itm.name.toLowerCase().includes(crrText.toLowerCase()) )
 
-                            Item {
-                                width: grid.width / grid.columns - grid.columnSpacing * (grid.columns - 1)
-                                height: 140
-                                visible: modelData.name.toLowerCase().includes(crrText.toLowerCase())
 
-                                Rectangle {
-                                    color: mouseArea.containsMouse ? '#fff': "transparent"
-                                    opacity: mouseArea.containsMouse ? 0.15: 0
-                                    width: parent.width
-                                    height: parent.height
+                        Item {
+                            width: grid.width / grid.columns - grid.columnSpacing * (grid.columns - 1)
+                            height: 140
+                            visible: modelData.name.toLowerCase().includes(crrText.toLowerCase())
 
-                                    Behavior on opacity {
-                                    NumberAnimation {
-                                        duration: 300
-                                        easing.type: Easing.InOutQuad
-                                    }
-                                }
-
-                            }
                             Rectangle {
-                                color: "transparent"
+                                color: selectedIndex === index || mouseArea.containsMouse ? '#fff': "transparent"
+                                opacity: selectedIndex === index || mouseArea.containsMouse ? 0.15: 0
                                 width: parent.width
                                 height: parent.height
 
-                                MouseArea {
-                                    id: mouseArea
-                                    anchors.fill: parent
-                                    hoverEnabled: true
-                                    cursorShape: Qt.PointingHandCursor
-
-                                    onClicked: {
-                                        launcherWidgetVisible = false
-                                        modelData.execute()
-                                    }
+                                Behavior on opacity {
+                                NumberAnimation {
+                                    duration: 300
+                                    easing.type: Easing.InOutQuad
                                 }
+                            }
 
-                                ColumnLayout{
-                                    id: column
-                                    spacing: 0
-                                    anchors.fill: parent
-                                    anchors.centerIn: parent
+                        }
+                        Rectangle {
+                            color: "transparent"
+                            width: parent.width
+                            height: parent.height
 
-                                    IconImage {
-                                        Layout.alignment: Qt.AlignCenter | Qt.AlignVCenter
-                                        implicitSize: mouseArea.containsMouse ? 85: 60
-                                        source: Quickshell.iconPath(modelData.icon)
+                            MouseArea {
+                                id: mouseArea
+                                anchors.fill: parent
+                                hoverEnabled: true
+                                cursorShape: Qt.PointingHandCursor
 
-                                        Behavior on implicitSize {
-                                        NumberAnimation {
-                                            duration: 150
-                                            easing.type: Easing.InOutQuad
-                                        }
-                                    }
+                                onClicked: {
+                                    launcherWidgetVisible = false
+                                    modelData.execute()
                                 }
-                                Text {
-                                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                                    Layout.fillWidth: true
-                                    Layout.margins: 5
-                                    horizontalAlignment: Text.AlignHCenter
-                                    text: modelData.name
-                                    elide: Text.ElideRight
-                                    color: "#fff"
-                                    font.weight: 700
-                                    font.pixelSize: mouseArea.containsMouse ? 22: 20
+                            }
 
-                                    Behavior on font.pixelSize {
+                            ColumnLayout{
+                                id: column
+                                spacing: 0
+                                anchors.fill: parent
+                                anchors.centerIn: parent
+
+                                IconImage {
+                                    Layout.alignment: Qt.AlignCenter | Qt.AlignVCenter
+                                    implicitSize: selectedIndex === index || mouseArea.containsMouse ? 85: 60
+                                    source: Quickshell.iconPath(modelData.icon)
+
+                                    Behavior on implicitSize {
                                     NumberAnimation {
                                         duration: 150
                                         easing.type: Easing.InOutQuad
                                     }
+                                }
+                            }
+                            Text {
+                                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                                Layout.fillWidth: true
+                                Layout.margins: 5
+                                horizontalAlignment: Text.AlignHCenter
+                                text: modelData.name
+                                elide: Text.ElideRight
+                                color: "#fff"
+                                font.weight: 700
+                                font.pixelSize: selectedIndex === index || mouseArea.containsMouse ? 22: 20
+
+                                Behavior on font.pixelSize {
+                                NumberAnimation {
+                                    duration: 150
+                                    easing.type: Easing.InOutQuad
                                 }
                             }
                         }
@@ -168,6 +205,7 @@ FloatingWindow{
             }
         }
     }
+}
 
 }
 }

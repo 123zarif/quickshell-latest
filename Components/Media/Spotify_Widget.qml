@@ -8,9 +8,9 @@ import Qt5Compat.GraphicalEffects
 PopupWindow {
     id: spotifyPopup
     anchor.window: root
-    property Item popupAnchor: null
 
-    anchor.rect.x: popupAnchor.x + 15
+
+    anchor.rect.x: 172
     anchor.rect.y: root.height - 10
 
     implicitWidth: 500

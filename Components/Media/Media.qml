@@ -7,10 +7,10 @@ import Quickshell.Services.Mpris
 
 
 
-
-RowLayout {
+Item {
     id: mediaContainer
-
+    Layout.preferredWidth: 120
+    Layout.fillHeight: true
 
     property string pic_url: ""
 
@@ -22,28 +22,6 @@ RowLayout {
     property bool prevHovering: false
     property bool playHovering: false
     property bool nextHovering: false
-
-
-
-    Timer {
-        id: graceTimer
-        interval: 50
-        running: false
-        repeat: false
-        onTriggered: {
-            if (mainHovering || widgetHovering || sliderHovering || prevHovering || playHovering || nextHovering)
-            {
-                showWidget = true
-            }
-            else {
-                showWidget = false
-            }
-        }
-    }
-
-
-    Layout.preferredWidth: 300
-    Layout.fillHeight: true
 
 
     MouseArea {
@@ -62,49 +40,66 @@ RowLayout {
         }
     }
 
-
-    Repeater {
-        model: Mpris.players
-
-        Rectangle {
-            id: rect
-            Layout.fillHeight: true
-            Layout.preferredWidth: childrenRect.width + 21
-            color: secondary
-            topLeftRadius: 100
-            topRightRadius: 100
-            bottomLeftRadius: showWidget ? 0: 100
-            bottomRightRadius: showWidget ? 0: 100
-            visible: modelData.identity == "Spotify" ? true: false
+    RowLayout {
+        anchors.fill: parent
 
 
-            Spotify_Widget {
-            player: modelData
-            popupAnchor: parent
+        Timer {
+            id: graceTimer
+            interval: 50
+            running: false
+            repeat: false
+            onTriggered: {
+                if (mainHovering || widgetHovering || sliderHovering || prevHovering || playHovering || nextHovering)
+                {
+                    showWidget = true
+                }
+                else {
+                    showWidget = false
+                }
+            }
         }
 
+        Repeater {
+            model: Mpris.players
 
-        RowLayout {
-            anchors.leftMargin: 10
-            anchors.centerIn: parent
-            spacing: 3
+            Rectangle {
+                id: rect
+                Layout.fillHeight: true
+                Layout.preferredWidth: childrenRect.width + 21
+                color: secondary
+                topLeftRadius: 100
+                topRightRadius: 100
+                bottomLeftRadius: showWidget ? 0: 100
+                bottomRightRadius: showWidget ? 0: 100
+                visible: modelData.identity == "Spotify" ? true: false
 
-            Icons {
-                name: "spotify"
-                overlay: false
-                size: 20
-            }
 
-            Text {
+                Spotify_Widget { player: modelData }
 
-                id: trackTitle
-                text: modelData.trackTitle
-                font.pixelSize: 13
-                font.family: font_family
-                color: primary
-                font.bold: true
+
+                RowLayout {
+                    anchors.leftMargin: 10
+                    anchors.centerIn: parent
+                    spacing: 3
+
+                    Icons {
+                        name: "spotify"
+                        overlay: false
+                        size: 20
+                    }
+
+                    Text {
+
+                        id: trackTitle
+                        text: modelData.trackTitle
+                        font.pixelSize: 13
+                        font.family: font_family
+                        color: primary
+                        font.bold: true
+                    }
+                }
             }
         }
     }
-}
 }

@@ -5,12 +5,13 @@ import Quickshell
 
 Rectangle{
     anchors.top: parent.top
-    width: trackTitle.width > trackArtist.width ? trackTitle.width + 40: trackArtist.width + 40
+    width: column.width + 40
     height: trackTitle.height + trackArtist.height + 30
     radius: 20
     color: '#a8000000'
     opacity: 1
     ColumnLayout {
+        id: column
         anchors.centerIn: parent
         spacing: 5
 
