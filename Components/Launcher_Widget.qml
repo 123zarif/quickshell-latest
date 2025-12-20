@@ -19,6 +19,11 @@ FloatingWindow{
     minimumSize: Qt.size(screen.width, screen.height)
     maximumSize: Qt.size(screen.width, screen.height)
 
+    HyprlandFocusGrab {
+        id: grab
+        windows: [ laucnherPopup ]
+    }
+
 
     Timer {
         interval: 10
@@ -27,6 +32,7 @@ FloatingWindow{
         onTriggered: {
             main.visible = true
             main.opacity = 1
+            grab.active = true
         }
     }
 

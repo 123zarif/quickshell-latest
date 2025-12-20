@@ -23,11 +23,23 @@ PanelWindow {
         right: true
     }
 
+
+    FileView {
+        id: colorsJson
+        path: Qt.resolvedUrl("./persists/colors.json")
+        blockLoading: true
+    }
+
+
+
+    readonly property var colors: JSON.parse(colorsJson.text())
+
     property string font_family: "Helvetica"
-    property color primary: "#221E1E"
-    property color secondary: "#D3D2D2"
-    property color light: "#5E5E67"
-    property color active: '#55df46'
+
+    property color primary: colors.primary
+    property color secondary: colors.secondary
+    property color light: colors.light
+    property color active: colors.active
 
 
     property double memUsed: 0.1
@@ -41,6 +53,7 @@ PanelWindow {
 
     property bool systemWidgetVisible: false
     property bool launcherWidgetVisible: false
+    property bool themeWidgetVisible: false
 
 
     Process {
@@ -114,8 +127,22 @@ GlobalShortcut {
 }
 
 
+GlobalShortcut {
+    name: "theme_widget"
+    description: "Open theme switcher"
+    onPressed: {
+        themeWidgetVisible = !themeWidgetVisible
+    }
+}
+
+
 Item {
     id: widgets
+    LazyLoader {
+        loading: false
+        active: themeWidgetVisible
+        Theme_Widget {}
+    }
     LazyLoader {
         loading: false
         active: systemWidgetVisible
