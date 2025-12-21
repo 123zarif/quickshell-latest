@@ -43,7 +43,7 @@ Rectangle {
         Text {
             id: ramDetails
             Layout.rightMargin: 10
-            text: memUsed.toString() + "GiB / " + memTotal + "GiB"
+            text: memUsed.toString().padStart(2, '0') + "GiB / " + memTotal.toString().padStart(2, '0') + "GiB"
             font.pixelSize: 13
             font.family: font_family
             color: primary

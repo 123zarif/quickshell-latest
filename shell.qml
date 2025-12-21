@@ -36,194 +36,194 @@ PanelWindow {
 
     property string font_family: "Helvetica"
 
-    property color primary: colors.primary
-    property color secondary: colors.secondary
-    property color light: colors.light
-    property color active: colors.active
+        property color primary: colors.primary
+            property color secondary: colors.secondary
+                property color light: colors.light
+                    property color active: colors.active
 
 
-    property double memUsed: 0.1
-    property double memTotal: 1.1
-    property int memPercent: 0
+                        property double memUsed: 0.1
+                            property double memTotal: 1.1
+                                property int memPercent: 0
 
-    property int lastCpuIdle: 0
-    property int lastCpuTotal: 1
-    property int cpuPercent: 0
-
-
-    property bool systemWidgetVisible: false
-    property bool launcherWidgetVisible: false
-    property bool themeWidgetVisible: false
+                                    property int lastCpuIdle: 0
+                                        property int lastCpuTotal: 1
+                                            property int cpuPercent: 0
 
 
-    Process {
-        id: memProcess
-        command: ["sh", "-c", "free | grep Mem" ]
-        stdout: SplitParser {
-            onRead: data => {
-            var parts = data.trim().split(/\s+/);
-            var total = parseInt(parts[1]) || 1;
-            var used = parseInt(parts[2]) || 1;
-
-            var totalGib = (total / 1024 / 1024).toFixed(1);
-            var usedGib = (used / 1024 / 1024).toFixed(1);
-            var percentUsed = Math.round(((used / total) * 100));
-
-            memTotal = totalGib;
-            memUsed = usedGib;
-            memPercent = percentUsed;
-        }
-    }
-
-}
-
-Process {
-    id: cpuProcess
-    command: ["sh", "-c", "grep '^cpu ' /proc/stat" ]
-    stdout: SplitParser {
-        onRead: data => {
-        var parts = data.trim().split(/\s+/);
-        var idle = parseInt(parts[4]) + parseInt(parts[5]);
-        const total = parts.slice(1).reduce((acc, val) => acc + parseInt(val), 0);
-
-        if (lastCpuTotal > 0)
-        {
-            cpuPercent = (100 * (1 - (idle - lastCpuIdle) / (total - lastCpuTotal))).toFixed(2);
-
-        }
-
-        lastCpuIdle = idle;
-        lastCpuTotal = total;
-    }
-}
-
-}
-
-Timer {
-    interval: 3000
-    running: true
-    repeat: true
-    onTriggered: {
-        memProcess.running = true
-        cpuProcess.running = true
-    }
-}
+                                                property bool systemWidgetVisible: false
+                                                    property bool launcherWidgetVisible: false
+                                                        property bool themeWidgetVisible: false
 
 
-GlobalShortcut {
-    name: "system_widget"
-    description: "Toggles the system widget"
-    onPressed: {
-        systemWidgetVisible = !systemWidgetVisible
-    }
-}
+                                                            Process {
+                                                                id: memProcess
+                                                                command: ["sh", "-c", "free | grep Mem" ]
+                                                                stdout: SplitParser {
+                                                                    onRead: data => {
+                                                                    var parts = data.trim().split(/\s+/);
+                                                                    var total = parseInt(parts[1]) || 1;
+                                                                    var used = parseInt(parts[2]) || 1;
 
-GlobalShortcut {
-    name: "launcher_widget"
-    description: "Toggles the launcher widget"
-    onPressed: {
-        launcherWidgetVisible = !launcherWidgetVisible
-    }
-}
+                                                                    var totalGib = (total / 1024 / 1024).toFixed(1);
+                                                                    var usedGib = (used / 1024 / 1024).toFixed(1);
+                                                                    var percentUsed = Math.round(((used / total) * 100));
 
+                                                                    memTotal = totalGib;
+                                                                    memUsed = usedGib;
+                                                                    memPercent = percentUsed;
+                                                                }
+                                                            }
 
-GlobalShortcut {
-    name: "theme_widget"
-    description: "Open theme switcher"
-    onPressed: {
-        themeWidgetVisible = !themeWidgetVisible
-    }
-}
+                                                        }
 
+                                                        Process {
+                                                            id: cpuProcess
+                                                            command: ["sh", "-c", "grep '^cpu ' /proc/stat" ]
+                                                            stdout: SplitParser {
+                                                                onRead: data => {
+                                                                var parts = data.trim().split(/\s+/);
+                                                                var idle = parseInt(parts[4]) + parseInt(parts[5]);
+                                                                const total = parts.slice(1).reduce((acc, val) => acc + parseInt(val), 0);
 
-Item {
-    id: widgets
-    LazyLoader {
-        loading: false
-        active: themeWidgetVisible
-        Theme_Widget {}
-    }
-    LazyLoader {
-        loading: false
-        active: systemWidgetVisible
-        System_Widgets {}
-    }
-    LazyLoader {
-        loading: false
-        active: launcherWidgetVisible
-        Launcher_Widget {}
-    }
-}
+                                                                if (lastCpuTotal > 0)
+                                                                {
+                                                                    cpuPercent = (100 * (1 - (idle - lastCpuIdle) / (total - lastCpuTotal))).toFixed(2);
 
-RowLayout {
-    anchors.fill: parent
-    anchors.margins: 10
-    spacing: 0
+                                                                }
 
-    Rectangle {
-        Layout.fillHeight: true
-        Layout.fillWidth: true
-        color: "transparent"
+                                                                lastCpuIdle = idle;
+                                                                lastCpuTotal = total;
+                                                            }
+                                                        }
 
-        RowLayout {
-            anchors.left: parent.left
-            height: parent.height
-            width: children.width
+                                                    }
 
-            spacing: 10
-
-            Icons {
-                id: arch
-                name: "distributor-logo-archman"
-                iconColor: secondary
-
-                MouseArea {
-                    anchors.fill: parent
-                    cursorShape: Qt.PointingHandCursor
-                    onClicked: {
-                        if (systemWidgetVisible === false)
-                        {
-                            systemWidgetVisible = true
-                        }
-                        else if(systemWidgetVisible === true)
-                        {
-                            systemWidgetVisible = false
-                        }
-                    }
-                }
-            }
-            Time { }
-            Media { }
-        }
+                                                    Timer {
+                                                        interval: 3000
+                                                        running: true
+                                                        repeat: true
+                                                        onTriggered: {
+                                                            memProcess.running = true
+                                                            cpuProcess.running = true
+                                                        }
+                                                    }
 
 
+                                                    GlobalShortcut {
+                                                        name: "system_widget"
+                                                        description: "Toggles the system widget"
+                                                        onPressed: {
+                                                            systemWidgetVisible = !systemWidgetVisible
+                                                        }
+                                                    }
 
-    }
+                                                    GlobalShortcut {
+                                                        name: "launcher_widget"
+                                                        description: "Toggles the launcher widget"
+                                                        onPressed: {
+                                                            launcherWidgetVisible = !launcherWidgetVisible
+                                                        }
+                                                    }
 
-    Workspaces { }
 
-    Rectangle {
-        Layout.fillWidth: true
-        Layout.fillHeight: true
+                                                    GlobalShortcut {
+                                                        name: "theme_widget"
+                                                        description: "Open theme switcher"
+                                                        onPressed: {
+                                                            themeWidgetVisible = !themeWidgetVisible
+                                                        }
+                                                    }
 
-        color: "transparent"
 
-        RowLayout {
-            anchors.right: parent.right
-            height: parent.height
-            width: children.width
+                                                    Item {
+                                                        id: widgets
+                                                        LazyLoader {
+                                                            loading: false
+                                                            active: themeWidgetVisible
+                                                            Theme_Widget {}
+                                                        }
+                                                        LazyLoader {
+                                                            loading: false
+                                                            active: systemWidgetVisible
+                                                            System_Widgets {}
+                                                        }
+                                                        LazyLoader {
+                                                            loading: false
+                                                            active: launcherWidgetVisible
+                                                            Launcher_Widget {}
+                                                        }
+                                                    }
 
-            spacing: 10
+                                                    RowLayout {
+                                                        anchors.fill: parent
+                                                        anchors.margins: 10
+                                                        spacing: 0
+
+                                                        Rectangle {
+                                                            Layout.fillHeight: true
+                                                            Layout.fillWidth: true
+                                                            color: "transparent"
+
+                                                            RowLayout {
+                                                                anchors.left: parent.left
+                                                                height: parent.height
+                                                                width: children.width
+
+                                                                spacing: 10
+
+                                                                Icons {
+                                                                    id: arch
+                                                                    name: "distributor-logo-archman"
+                                                                    iconColor: secondary
+
+                                                                    MouseArea {
+                                                                        anchors.fill: parent
+                                                                        cursorShape: Qt.PointingHandCursor
+                                                                        onClicked: {
+                                                                            if (systemWidgetVisible === false)
+                                                                            {
+                                                                                systemWidgetVisible = true
+                                                                            }
+                                                                            else if(systemWidgetVisible === true)
+                                                                            {
+                                                                                systemWidgetVisible = false
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                                Time { }
+                                                                Media { }
+                                                            }
 
 
 
+                                                        }
 
-            Ram { }
-            Cpu { }
-            Sound { }
-        }
-    }
+                                                        Workspaces { }
 
-}
+                                                        Rectangle {
+                                                            Layout.fillWidth: true
+                                                            Layout.fillHeight: true
 
-}
+                                                            color: "transparent"
+
+                                                            RowLayout {
+                                                                anchors.right: parent.right
+                                                                height: parent.height
+                                                                width: children.width
+
+                                                                spacing: 10
+
+
+
+
+                                                                Ram { }
+                                                                Cpu { }
+                                                                Sound { }
+                                                            }
+                                                        }
+
+                                                    }
+
+                                                }
