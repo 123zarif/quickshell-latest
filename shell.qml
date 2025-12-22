@@ -218,6 +218,7 @@ PanelWindow {
 
                                                             Ram { }
                                                             Cpu { }
+                                                            Bluetooth {}
                                                             Sound { }
                                                         }
                                                     }
