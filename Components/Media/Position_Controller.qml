@@ -55,14 +55,12 @@ Item {
                             Layout.fillWidth: true
                             text: Math.floor(player.position/60).toString().padStart(2, '0') + ": " + Math.floor(player.position%60).toString().padStart(2, '0') + " / " + Math.round(player.length/60).toString().padStart(2, '0') + ": " + Math.round(player.length%60 ).toString().padStart(2, '0')
                             font.pixelSize: 14
-                            font.family: root.font_family
                             color: secondary
                             font.bold: true
                         }
                         Text {
                             text: "-" + Math.floor((player.length - player.position)/60).toString().padStart(2, '0') + ": " + Math.floor((player.length - player.position)%60).toString().padStart(2, '0')
                             font.pixelSize: 14
-                            font.family: root.font_family
                             color: secondary
                             font.bold: true
                             Layout.alignment: Qt.AlignRight
