@@ -36,6 +36,7 @@ FloatingWindow {
                     main.opacity = 1
                     grab.active = true
                     sortedApps = DesktopEntries.applications.values
+                    searchField.forceActiveFocus()
                 }
             }
 
@@ -96,7 +97,7 @@ FloatingWindow {
                                     sortedApps[selectedIndex].execute()
                                 }
                             }
-                            focus: true
+                            // focus: true
                             anchors.fill: parent
                             font.pixelSize: 20
                             leftInset: -10
@@ -140,7 +141,6 @@ FloatingWindow {
                                 Item {
                                     width: grid.width / grid.columns - grid.columnSpacing * (grid.columns - 1)
                                     height: 140
-                                    visible: modelData.name.toLowerCase().includes(crrText.toLowerCase())
 
                                     Rectangle {
                                         color: selectedIndex === index || mouseArea.containsMouse ? '#fff': "transparent"
