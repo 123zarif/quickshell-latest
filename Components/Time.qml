@@ -38,7 +38,6 @@ Rectangle {
             Layout.alignment: Qt.AlignVCenter
             text: Qt.formatDateTime(clock.date, "hh:mm AP | dddd")
             font.pixelSize: 13
-            font.family: font_family
             color: primary
             font.bold: true
         }
@@ -49,7 +48,6 @@ Rectangle {
             Layout.alignment: Qt.AlignVCenter
             text: Qt.formatDateTime(clock.date, "MMMM dd, yyyy")
             font.pixelSize: 13
-            font.family: font_family
             color: primary
             font.bold: true
         }

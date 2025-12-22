@@ -105,7 +105,6 @@ Item {
 
                                                         text: modelData.trackTitle
                                                         font.pixelSize: 13
-                                                        font.family: font_family
                                                         elide: Text.ElideRight
                                                         color: primary
                                                         font.bold: true

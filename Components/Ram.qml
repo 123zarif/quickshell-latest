@@ -35,7 +35,6 @@ Rectangle {
             Layout.alignment: Qt.AlignVCenter
             text: "RAM: " + memPercent.toString().padStart(2, '0') + "%"
             font.pixelSize: 13
-            font.family: font_family
             color: primary
             font.bold: true
         }
@@ -45,7 +44,6 @@ Rectangle {
             Layout.rightMargin: 10
             text: memUsed.toString().padStart(2, '0') + "GiB / " + memTotal.toString().padStart(2, '0') + "GiB"
             font.pixelSize: 13
-            font.family: font_family
             color: primary
             font.bold: true
         }

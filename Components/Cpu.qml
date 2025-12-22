@@ -18,12 +18,8 @@ Rectangle {
         anchors.centerIn: parent
         text: "CPU: " + cpuPercent + "%"
         font.pixelSize: 13
-        font.family: font_family
         color: primary
         font.bold: true
     }
-
-
-
 }
 

@@ -51,7 +51,6 @@ Rectangle {
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
                 text: Math.round(Pipewire?.defaultAudioSink?.audio?.volume * 100) + "%"
                 font.pixelSize: 13
-                font.family: font_family
                 color: primary
                 font.bold: true
             }
