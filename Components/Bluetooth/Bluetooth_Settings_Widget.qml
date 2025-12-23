@@ -27,7 +27,7 @@ PopupWindow {
                 repeat: false
                 onTriggered: {
                     let pos = anchorTo.mapToItem(root.contentItem, 0, 0)
-                    bluetoothSettingsPopup.anchor.rect.x = pos.x - bluetoothSettingsPopup.implicitWidth + anchorTo.width
+                    bluetoothSettingsPopup.anchor.rect.x = pos.x - bluetoothSettingsPopup.implicitWidth + anchorTo.Layout.preferredWidth
 
                 }
             }
