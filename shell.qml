@@ -1,5 +1,7 @@
 import "./Components"
 import "./Components/Media"
+import "./Components/Bluetooth"
+import "./Components/Sound"
 import QtQuick
 import QtQuick.Layouts
 import Quickshell

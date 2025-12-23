@@ -28,7 +28,7 @@ FloatingWindow {
 
 
             Timer {
-                interval: 10
+                interval: 40
                 running: true
                 repeat: false
                 onTriggered: {

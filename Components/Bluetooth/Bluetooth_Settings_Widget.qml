@@ -1,3 +1,5 @@
+import "../"
+
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
@@ -14,8 +16,8 @@ PopupWindow {
             anchor.rect.x: 0
             anchor.rect.y: root.height - 10
 
-            implicitWidth: 500
-            implicitHeight: 400
+            implicitWidth: 400
+            implicitHeight: 200
             visible: showWidget || rect.opacity > 0
             color: "transparent"
 
@@ -25,7 +27,7 @@ PopupWindow {
                 repeat: false
                 onTriggered: {
                     let pos = anchorTo.mapToItem(root.contentItem, 0, 0)
-                    bluetoothSettingsPopup.anchor.rect.x = pos.x - 500 + anchorTo.width
+                    bluetoothSettingsPopup.anchor.rect.x = pos.x - bluetoothSettingsPopup.implicitWidth + anchorTo.width
 
                 }
             }
@@ -91,11 +93,12 @@ PopupWindow {
             ColumnLayout {
                 anchors.fill: parent
                 anchors.margins: 20
+                anchors.topMargin: 10
                 spacing: 20
                 Text {
                     text: "Bluetooth Settings"
                     color: primary
-                    font.pixelSize: 28
+                    font.pixelSize: 23
                     font.weight: Font.Bold
                     Layout.alignment: Qt.AlignHCenter
                 }
@@ -127,7 +130,7 @@ PopupWindow {
                                 id: removeIcon
                                 name: "user-trash"
                                 iconColor: '#fff'
-                                size: 15
+                                size: 16
                                 anchors.verticalCenter: parent.verticalCenter
                                 anchors.horizontalCenter: parent.horizontalCenter
                             }
@@ -136,7 +139,7 @@ PopupWindow {
                         Text {
                             text: modelData.name.toUpperCase()
                             color: primary
-                            font.pixelSize: 20
+                            font.pixelSize: 17
                             font.weight: Font.Bold
                             Layout.fillWidth: true
 
