@@ -44,7 +44,7 @@ PopupWindow {
 
             Timer {
                 interval: 50
-                running: true
+                running: showWidget
                 repeat: false
                 onTriggered: {
                     let pos = anchorTo.mapToItem(root.contentItem, 0, 0)

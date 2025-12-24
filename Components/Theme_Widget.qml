@@ -75,7 +75,7 @@ FloatingWindow {
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.bottom: parent.bottom
                     anchors.margins: 20
-                    color: primary
+                    color: active
                     radius: 20
                     border.color: secondary
                     border.width: 2
