@@ -194,93 +194,85 @@ PanelWindow {
 
 
 
-                ScrollView {
-                    id: scrollView
+                GridView {
+                    id: grid
+                    cellWidth: parent.width / 3
+                    cellHeight: 170
                     Layout.fillWidth: true
                     Layout.fillHeight: true
+                    clip: true
+                    model: sortedApps
+                    currentIndex: selectedIndex
+                    highlightMoveDuration: 300
 
-                    GridLayout {
-                        id: grid
-                        width: scrollView.availableWidth
-                        height: parent.height
-                        columns: 3
-                        rowSpacing: 25
-                        columnSpacing: 10
+                    delegate: Item {
+                        width: grid.cellWidth - 20
+                        height: grid.cellHeight - 20
 
-                        Repeater {
-                            model: sortedApps
+                        Rectangle {
+                            color: selectedIndex === index || mouseArea.containsMouse ? '#fff': "transparent"
+                            opacity: selectedIndex === index || mouseArea.containsMouse ? 0.15: 0
+                            width: parent.width
+                            height: parent.height
 
-
-                            Item {
-                                width: grid.width / grid.columns - grid.columnSpacing * (grid.columns - 1)
-                                height: 140
-
-                                Rectangle {
-                                    color: selectedIndex === index || mouseArea.containsMouse ? '#fff': "transparent"
-                                    opacity: selectedIndex === index || mouseArea.containsMouse ? 0.15: 0
-                                    width: parent.width
-                                    height: parent.height
-
-                                    Behavior on opacity {
-                                    NumberAnimation {
-                                        duration: 300
-                                        easing.type: Easing.InOutQuad
-                                    }
-                                }
-
+                            Behavior on opacity {
+                            NumberAnimation {
+                                duration: 300
+                                easing.type: Easing.InOutQuad
                             }
-                            Rectangle {
-                                color: "transparent"
-                                width: parent.width
-                                height: parent.height
+                        }
 
-                                MouseArea {
-                                    id: mouseArea
-                                    anchors.fill: parent
-                                    hoverEnabled: true
-                                    cursorShape: Qt.PointingHandCursor
+                    }
+                    Rectangle {
+                        color: "transparent"
+                        width: parent.width
+                        height: parent.height
 
-                                    onClicked: {
-                                        launcherWidgetVisible = false
-                                        modelData.execute()
-                                    }
+                        MouseArea {
+                            id: mouseArea
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+
+                            onClicked: {
+                                launcherWidgetVisible = false
+                                modelData.execute()
+                            }
+                        }
+
+                        ColumnLayout {
+                            id: column
+                            spacing: 0
+                            anchors.fill: parent
+                            anchors.centerIn: parent
+
+                            IconImage {
+                                Layout.alignment: Qt.AlignCenter | Qt.AlignVCenter
+                                implicitSize: selectedIndex === index || mouseArea.containsMouse ? 85: 60
+                                source: Quickshell.iconPath(modelData.icon)
+
+                                Behavior on implicitSize {
+                                NumberAnimation {
+                                    duration: 150
+                                    easing.type: Easing.InOutQuad
                                 }
+                            }
+                        }
+                        Text {
+                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                            Layout.fillWidth: true
+                            Layout.margins: 5
+                            horizontalAlignment: Text.AlignHCenter
+                            text: modelData.name
+                            elide: Text.ElideRight
+                            color: "#fff"
+                            font.weight: 700
+                            font.pixelSize: selectedIndex === index || mouseArea.containsMouse ? 22: 20
 
-                                ColumnLayout {
-                                    id: column
-                                    spacing: 0
-                                    anchors.fill: parent
-                                    anchors.centerIn: parent
-
-                                    IconImage {
-                                        Layout.alignment: Qt.AlignCenter | Qt.AlignVCenter
-                                        implicitSize: selectedIndex === index || mouseArea.containsMouse ? 85: 60
-                                        source: Quickshell.iconPath(modelData.icon)
-
-                                        Behavior on implicitSize {
-                                        NumberAnimation {
-                                            duration: 150
-                                            easing.type: Easing.InOutQuad
-                                        }
-                                    }
-                                }
-                                Text {
-                                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                                    Layout.fillWidth: true
-                                    Layout.margins: 5
-                                    horizontalAlignment: Text.AlignHCenter
-                                    text: modelData.name
-                                    elide: Text.ElideRight
-                                    color: "#fff"
-                                    font.weight: 700
-                                    font.pixelSize: selectedIndex === index || mouseArea.containsMouse ? 22: 20
-
-                                    Behavior on font.pixelSize {
-                                    NumberAnimation {
-                                        duration: 150
-                                        easing.type: Easing.InOutQuad
-                                    }
-                                }
+                            Behavior on font.pixelSize {
+                            NumberAnimation {
+                                duration: 150
+                                easing.type: Easing.InOutQuad
                             }
                         }
                     }
