@@ -3,13 +3,22 @@ import QtQuick.Layouts
 import QtQuick.Controls
 import Quickshell
 import Quickshell.Io
+import Quickshell.Wayland
 
-FloatingWindow {
+PanelWindow {
     property string basePath: "/home/zarif/.config"
 
-        title: "theme"
-        minimumSize: Qt.size(screen.width, screen.height)
-        maximumSize: Qt.size(screen.width, screen.height)
+        WlrLayershell.layer: WlrLayer.Top
+        WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
+
+        anchors {
+            top: true
+            bottom: true
+            left: true
+            right: true
+        }
+        implicitWidth: screen.width
+        implicitHeight: screen.height
         color: "transparent"
 
         FileView {
@@ -42,6 +51,16 @@ FloatingWindow {
                     selectedIndex = (foundIndex !== -1) ? foundIndex : 0
 
                     layout.visible = true
+                }
+
+                Timer {
+                    id: changeThemeTimer
+                    interval: 1000
+                    running: false
+                    repeat: false
+                    onTriggered: {
+                        updateTheme(selectedIndex)
+                    }
                 }
 
 
@@ -85,16 +104,18 @@ FloatingWindow {
                     Keys.onRightPressed: {
                         if (selectedIndex < themes.themes.length - 1)
                         {
+                            changeThemeTimer.running = false
                             themes.themes[selectedIndex].selected = false
                             themes.themes[selectedIndex + 1].selected = true
                             selectedIndex += 1
-                            updateTheme(selectedIndex)
+                            changeThemeTimer.running = true
                         }
                         else {
+                            changeThemeTimer.running = false
                             themes.themes[selectedIndex].selected = false
                             themes.themes[0].selected = true
                             selectedIndex = 0
-                            updateTheme(selectedIndex)
+                            changeThemeTimer.running = true
                         }
 
                     }
@@ -102,16 +123,18 @@ FloatingWindow {
                     Keys.onLeftPressed: {
                         if (selectedIndex > 0)
                         {
+                            changeThemeTimer.running = false
                             themes.themes[selectedIndex].selected = false
                             themes.themes[selectedIndex - 1].selected = true
                             selectedIndex -= 1
-                            updateTheme(selectedIndex)
+                            changeThemeTimer.running = true
                         }
                         else {
+                            changeThemeTimer.running = false
                             themes.themes[selectedIndex].selected = false
                             themes.themes[themes.themes.length - 1].selected = true
                             selectedIndex = themes.themes.length - 1
-                            updateTheme(selectedIndex)
+                            changeThemeTimer.running = true
                         }
                     }
 
