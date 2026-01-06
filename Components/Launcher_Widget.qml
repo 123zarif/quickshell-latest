@@ -20,7 +20,12 @@ PanelWindow {
             ]
 
 
-            WlrLayershell.layer: WlrLayer.Top
+            Component.onCompleted: {
+                if (this.WlrLayershell != null)
+                {
+                    this.WlrLayershell.layer = WlrLayer.Top
+                }
+            }
             WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
 
             id: laucnherPopup
@@ -64,9 +69,10 @@ PanelWindow {
             running: launcherWidgetVisible
             repeat: false
             onTriggered: {
+                filterApps()
                 main.visible = true
                 main.opacity = 1
-                searchField.forceActiveFocus()
+                searchField.focus = true
             }
         }
 
