@@ -70,7 +70,7 @@ Rectangle {
                 id: soundValue
 
                 Layout.fillHeight: true
-                spacing: 0
+                spacing: 2
 
                 Icons {
                     name: Pipewire?.defaultAudioSink?.audio?.volume == 1 ? "audio-volume-high": Pipewire?.defaultAudioSink?.audio?.volume == 0 ? "audio-volume-muted": "audio-volume-medium"

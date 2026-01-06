@@ -10,7 +10,7 @@ import Quickshell.Wayland
 
 FloatingWindow {
     property int selectedIndex: 0
-        property var sortedApps: null
+        property var sortedApps: DesktopEntries.applications.values
 
 
 
@@ -21,22 +21,15 @@ FloatingWindow {
             minimumSize: Qt.size(screen.width, screen.height)
             maximumSize: Qt.size(screen.width, screen.height)
 
-            HyprlandFocusGrab {
-                id: grab
-                windows: [ laucnherPopup ]
-            }
 
 
             Timer {
-                interval: 40
-                running: true
+                interval: 100
+                running: launcherWidgetVisible
                 repeat: false
                 onTriggered: {
                     main.visible = true
                     main.opacity = 1
-                    grab.active = true
-                    sortedApps = DesktopEntries.applications.values
-                    searchField.forceActiveFocus()
                 }
             }
 
@@ -82,29 +75,28 @@ FloatingWindow {
                                 if (selectedIndex - 3 >= 0) selectedIndex -= 3
                             }
                             Keys.onDownPressed: {
-                                if (selectedIndex + 3 < DesktopEntries.applications.values.length) selectedIndex += 3
+                                if (selectedIndex + 3 < sortedApps.length) selectedIndex += 3
                             }
                             Keys.onLeftPressed: {
                                 if (selectedIndex > 0) selectedIndex -= 1
                             }
                             Keys.onRightPressed: {
-                                if (selectedIndex + 1 < DesktopEntries.applications.values.length ) selectedIndex += 1
+                                if (selectedIndex + 1 < sortedApps.length ) selectedIndex += 1
                             }
                             Keys.onReturnPressed: {
-                                if (DesktopEntries.applications.values.length > 0)
+                                if (sortedApps.length > 0)
                                 {
                                     launcherWidgetVisible = false
                                     sortedApps[selectedIndex].execute()
                                 }
                             }
-                            // focus: true
                             anchors.fill: parent
                             font.pixelSize: 20
                             leftInset: -10
                             bottomInset: -5
                             topInset: -5
                             color: "#fff"
-
+                            focus: true
                             placeholderText: "Search applications..."
                             placeholderTextColor: '#b2b2b2'
                             background: Rectangle {
