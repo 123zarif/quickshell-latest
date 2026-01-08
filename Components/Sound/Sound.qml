@@ -111,7 +111,7 @@ Rectangle {
 
                 from: 0
                 to: 1
-                value: Pipewire?.defaultAudioSink && Pipewire?.defaultAudioSink?.audio?.volume ? Pipewire?.defaultAudioSink?.audio?.volume: 0
+                value: Pipewire?.defaultAudioSink && Pipewire?.defaultAudioSink?.audio?.volume ? Pipewire?.defaultAudioSink?.audio?.volume : 0
 
                 background: Rectangle {
                     color: light
@@ -135,8 +135,18 @@ Rectangle {
                 onValueChanged: {
                     if (Pipewire?.defaultAudioSink && Pipewire?.defaultAudioSink?.audio?.volume )
                     {
-                        Pipewire.defaultAudioSink.audio.volume = value
+                        if (value > 0)
+                        {
+                            if (Pipewire.defaultAudioSink.audio.muted) Pipewire.defaultAudioSink.audio.muted = false
+                            Pipewire.defaultAudioSink.audio.volume = value
+                        }
+                        else
+                        {
+                            Pipewire.defaultAudioSink.audio.muted = true
+                        }
+
                     }
+                    console.log(Pipewire?.defaultAudioSink?.audio)
                 }
 
             }

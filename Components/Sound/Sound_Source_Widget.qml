@@ -22,11 +22,11 @@ PopupWindow {
 
         Timer {
             interval: 50
-            running: true
+            running: showWidget
             repeat: false
             onTriggered: {
                 let pos = anchorTo.mapToItem(root.contentItem, 0, 0)
-                soundSettingsPopup.anchor.rect.x = pos.x - 300 + anchorTo.Layout.preferredWidth
+                soundSettingsPopup.anchor.rect.x = pos.x - parent.width + anchorTo.Layout.preferredWidth
             }
         }
 

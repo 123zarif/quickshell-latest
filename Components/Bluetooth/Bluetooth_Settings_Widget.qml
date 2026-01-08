@@ -22,12 +22,12 @@ PopupWindow {
             color: "transparent"
 
             Timer {
-                interval: 400
-                running: true
+                interval: 50
+                running: showWidget
                 repeat: false
                 onTriggered: {
                     let pos = anchorTo.mapToItem(root.contentItem, 0, 0)
-                    bluetoothSettingsPopup.anchor.rect.x = pos.x - 400 + anchorTo.Layout.preferredWidth
+                    bluetoothSettingsPopup.anchor.rect.x = pos.x - parent.width + anchorTo.Layout.preferredWidth
                 }
             }
 
