@@ -29,6 +29,7 @@ Rectangle {
         Text {
             id: trackArtist
             text: "@" +player?.trackArtist
+            visible: player?.trackArtist !== ""
             color: secondary
             opacity: 0.7
             font.pointSize: 12

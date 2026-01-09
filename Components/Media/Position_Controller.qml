@@ -13,8 +13,8 @@ Item {
             property bool stopUpdating: false
 
 
-                width: parent.width
-                height: 40
+                Layout.fillWidth: true
+                Layout.preferredHeight: 40
 
 
                 FrameAnimation {
@@ -44,13 +44,16 @@ Item {
                 }
 
                 ColumnLayout {
-                    width: parent.width
-                    height: parent.height
+                    anchors.fill: parent
+
+
+
+
 
                     spacing: 0
 
                     RowLayout {
-                        width: parent.width
+                        Layout.fillWidth: true
                         Text {
                             Layout.fillWidth: true
                             text: Math.floor(player.position/60).toString().padStart(2, '0') + ": " + Math.floor(player.position%60).toString().padStart(2, '0') + " / " + Math.round(player.length/60).toString().padStart(2, '0') + ": " + Math.round(player.length%60 ).toString().padStart(2, '0')
