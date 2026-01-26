@@ -12,7 +12,7 @@ PopupWindow {
     anchor.rect.x: root.width
     anchor.rect.y: screen.height / 2 - systemPopup.height / 2
     implicitWidth: 100
-    implicitHeight: 300
+    implicitHeight: 350
     color: "transparent"
     visible: systemWidgetVisible || backgroundRect.width > 0
 
@@ -20,7 +20,12 @@ PopupWindow {
     Process {
         id: lockProcess
         command: ["sh", "-c", "qs -p ~/.config/quickshell/Lock" ]
-    }
+      }
+
+      Process {
+        id: sleepProcess
+        command: ["sh", "-c", "systemctl suspend"]
+      }
 
     Process {
         id: shutdownProcess
@@ -79,7 +84,44 @@ PopupWindow {
                 }
             }
 
-        }
+          }
+
+
+            Rectangle {
+                id: sleepButton
+                color: sleepArea.containsMouse ? primary: "transparent"
+                Layout.leftMargin: 15
+                Layout.rightMargin: 15
+                Layout.fillWidth: true
+                height: 70
+                radius: 20
+
+                MouseArea {
+                    id: sleepArea
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: {
+                        sleepProcess.running = true
+                    }
+                }
+
+                Icons {
+                    anchors.centerIn: parent
+                    name: "weather-clear-night"
+                    size: 40
+                    iconColor: sleepArea.containsMouse ? secondary: primary
+                }
+
+                Behavior on color {
+                ColorAnimation {
+                    duration: 300
+                }
+            }
+
+          }
+        
+
         Rectangle {
             id: shutdownButton
             color: shutdownArea.containsMouse ? '#9aff0000': "transparent"

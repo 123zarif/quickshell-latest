@@ -1,13 +1,8 @@
-import "./Components"
-import "./Components/Media"
-import "./Components/Bluetooth"
-import "./Components/Sound"
+import "./Default" as Default
+import "./Minecraft" as Minecraft
 import QtQuick
-import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
-import Quickshell.Hyprland
-import Quickshell.Wayland
 
 
 ShellRoot {
@@ -25,45 +20,7 @@ ShellRoot {
             property color light: colors.light
                 property color active: colors.active
 
+                    Default.Main {}
+                    Minecraft.Main {}
 
-                    property bool launcherWidgetVisible: false
-                        property bool themeWidgetVisible: false
-
-                            GlobalShortcut {
-                                name: "launcher_widget"
-                                description: "Toggles the launcher widget"
-                                onPressed: {
-                                    launcherWidgetVisible = !launcherWidgetVisible
-                                }
-                            }
-                            GlobalShortcut {
-                                name: "theme_widget"
-                                description: "Open theme switcher"
-                                onPressed: {
-                                    themeWidgetVisible = !themeWidgetVisible
-                                }
-                            }
-
-                            LazyLoader {
-                                loading: false
-                                active: launcherWidgetVisible
-                                Launcher_Widget {}
-                            }
-                            LazyLoader {
-                                loading: false
-                                active: themeWidgetVisible
-                                Theme_Widget {}
-                            }
-
-                            Scope {
-                                Variants {
-                                    model: Quickshell.screens
-
-                                    delegate: Component {
-
-                                        Panel {}
-                                    }
-
-                                }
-                            }
-                        }
+                }

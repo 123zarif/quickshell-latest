@@ -77,12 +77,13 @@ PanelWindow {
                     hyprlandColorsJson.setText(data)
                     quickshellColorsJson.setText(JSON.stringify(themes.themes[index].colors))
 
+
+                    colorsJson.setText(JSON.stringify(themes))
                     primary = themes.themes[index].colors.primary
                     secondary = themes.themes[index].colors.secondary
                     light = themes.themes[index].colors.light
                     active = themes.themes[index].colors.active
                     applyWallpaper.running = true
-                    colorsJson.setText(JSON.stringify(themes))
 
                 }
 
