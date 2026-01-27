@@ -15,12 +15,22 @@ ShellRoot {
     readonly property var colors: JSON.parse(colorsJson.text())
 
 
-    property color primary: colors.primary
-        property color secondary: colors.secondary
-            property color light: colors.light
-                property color active: colors.active
+    property string theme: colors.theme
+        property color primary: colors.primary
+            property color secondary: colors.secondary
+                property color light: colors.light
+                    property color active: colors.active
 
-                    Default.Main {}
-                    Minecraft.Main {}
+                        LazyLoader {
+                            loading: false
+                            active: theme === "Default"
+                            Default.Main {}
+                        }
 
-                }
+                        LazyLoader {
+                            loading: false
+                            active: theme === "Minecraft"
+                            Minecraft.Main {}
+                        }
+
+                    }
