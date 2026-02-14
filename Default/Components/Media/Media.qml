@@ -91,7 +91,7 @@ Item {
                                                     spacing: 3
 
                                                     Icons {
-                                                        name: modelData.identity == "Spotify" ? "spotify" : modelData.identity == "Mozilla firefox" ? "firefox" : "applications-multimedia"
+                                                        name: modelData.identity == "Spotify" ? "spotify" : modelData.identity == "Brave" ? "brave" : "applications-multimedia"
                                                         overlay: false
                                                         size: 20
                                                         Layout.leftMargin: 10

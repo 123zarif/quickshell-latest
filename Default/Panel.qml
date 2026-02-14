@@ -1,4 +1,5 @@
 import "./Components"
+import "./Components/Time"
 import "./Components/Media"
 import "./Components/Bluetooth"
 import "./Components/Sound"
