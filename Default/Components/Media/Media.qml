@@ -35,84 +35,92 @@ Item {
                                         property bool playHovering: false
                                             property bool nextHovering: false
 
-                                                id: rect
-                                                Layout.preferredWidth: trackInfo.width > 200 ? 200 : trackInfo.width
-                                                Layout.fillHeight: true
-                                                color: secondary
-                                                topLeftRadius: 100
-                                                topRightRadius: 100
-                                                bottomLeftRadius: showWidget ? 0: 100
-                                                bottomRightRadius: showWidget ? 0: 100
-                                                clip: true
+                                                property bool show_name: true
+
+                                                    id: rect
+                                                    Layout.preferredWidth: trackInfo.width > 200 ? 200 : trackInfo.width
+                                                    Layout.fillHeight: true
+                                                    color: secondary
+                                                    topLeftRadius: 100
+                                                    topRightRadius: 100
+                                                    bottomLeftRadius: showWidget ? 0: 100
+                                                    bottomRightRadius: showWidget ? 0: 100
+                                                    clip: true
 
 
-                                                Timer {
-                                                    id: graceTimer
-                                                    interval: 50
-                                                    running: false
-                                                    repeat: false
-                                                    onTriggered: {
-                                                        if (mainHovering || widgetHovering || sliderHovering || prevHovering || playHovering || nextHovering)
-                                                        {
-                                                            showWidget = true
+                                                    Timer {
+                                                        id: graceTimer
+                                                        interval: 50
+                                                        running: false
+                                                        repeat: false
+                                                        onTriggered: {
+                                                            if (mainHovering || widgetHovering || sliderHovering || prevHovering || playHovering || nextHovering)
+                                                            {
+                                                                showWidget = true
+                                                            }
+                                                            else {
+                                                                showWidget = false
+                                                            }
                                                         }
-                                                        else {
-                                                            showWidget = false
+                                                    }
+                                                    MouseArea {
+                                                        anchors.fill: parent
+                                                        hoverEnabled: true
+
+                                                        onEntered: {
+                                                            mainHovering = true
+                                                            graceTimer.start()
+                                                        }
+                                                        onExited: {
+                                                            mainHovering = false
+                                                            graceTimer.start()
+
+                                                        }
+                                                        onClicked: {
+                                                            show_name = !show_name
                                                         }
                                                     }
-                                                }
-                                                MouseArea {
-                                                    anchors.fill: parent
-                                                    hoverEnabled: true
 
-                                                    onEntered: {
-                                                        mainHovering = true
-                                                        graceTimer.start()
-                                                    }
-                                                    onExited: {
-                                                        mainHovering = false
-                                                        graceTimer.start()
-
-                                                    }
+                                                    Spotify_Widget {
+                                                    player: modelData
+                                                    anchorTo: rect
                                                 }
 
-                                                Spotify_Widget {
-                                                player: modelData
-                                                anchorTo: rect
-                                            }
-
-                                            Item {
-                                                height: parent.height
-
-                                                RowLayout {
-                                                    id: trackInfo
-                                                    width: implicitWidth > 200 ? 200 : implicitWidth
+                                                Item {
                                                     height: parent.height
-                                                    spacing: 3
 
-                                                    Icons {
-                                                        name: modelData.identity == "Spotify" ? "spotify" : modelData.identity == "Brave" ? "brave" : "applications-multimedia"
-                                                        overlay: false
-                                                        size: 20
-                                                        Layout.leftMargin: 10
-                                                    }
+                                                    RowLayout {
+                                                        id: trackInfo
+                                                        width: implicitWidth > 200 ? 200 : implicitWidth
+                                                        height: parent.height
+                                                        spacing: 3
 
-                                                    Text {
+                                                        Icons {
+                                                            name: modelData.identity == "Spotify" ? "spotify" : modelData.identity == "Brave" ? "brave" : "applications-multimedia"
+                                                            overlay: false
+                                                            size: 20
+                                                            Layout.leftMargin: 10
+                                                            Layout.rightMargin: show_name ? 0 : 10
+                                                        }
 
-                                                        id: trackTitle
+                                                        Text {
 
-                                                        Layout.fillWidth: true
+                                                            id: trackTitle
 
-                                                        text: modelData.trackTitle
-                                                        font.pixelSize: 13
-                                                        elide: Text.ElideRight
-                                                        color: primary
-                                                        font.bold: true
-                                                        Layout.rightMargin: 10
+                                                            Layout.fillWidth: true
+
+                                                            visible: show_name
+
+                                                            text: modelData.trackTitle
+                                                            font.pixelSize: 13
+                                                            elide: Text.ElideRight
+                                                            color: primary
+                                                            font.bold: true
+                                                            Layout.rightMargin: 10
+                                                        }
                                                     }
                                                 }
                                             }
                                         }
                                     }
                                 }
-                            }
