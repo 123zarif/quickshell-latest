@@ -183,7 +183,7 @@ PanelWindow {
                                     text: modelData.name
                                     font.pixelSize: 24
                                     font.weight: Font.Bold
-                                    color: selectedIndex === index ? primary: secondary
+                                    color: primary
                                     Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
                                 }
                                 Image {

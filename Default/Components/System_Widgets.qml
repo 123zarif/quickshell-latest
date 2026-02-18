@@ -20,20 +20,20 @@ PopupWindow {
     Process {
         id: lockProcess
         command: ["sh", "-c", "qs -p ~/.config/quickshell/Lock" ]
-      }
+    }
 
-      Process {
+    Process {
         id: sleepProcess
         command: ["sh", "-c", "systemctl suspend"]
-      }
+    }
 
     Process {
         id: shutdownProcess
-        command: ["sh", "-c", "systemctl poweroff" ]
+        command: ["hyprctl", "dispatch", "exec", "hyprshutdown -t 'Shutting down...' --post-cmd 'shutdown -P 0'"]
     }
     Process {
         id: restartProcess
-        command: ["sh", "-c", "systemctl reboot" ]
+        command: ["hyprctl", "dispatch", "exec", "hyprshutdown -t 'Restarting...' --post-cmd 'systemctl reboot'"]
     }
 
     Rectangle {
@@ -84,70 +84,33 @@ PopupWindow {
                 }
             }
 
-          }
+        }
 
-
-            Rectangle {
-                id: sleepButton
-                color: sleepArea.containsMouse ? primary: "transparent"
-                Layout.leftMargin: 15
-                Layout.rightMargin: 15
-                Layout.fillWidth: true
-                height: 70
-                radius: 20
-
-                MouseArea {
-                    id: sleepArea
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    cursorShape: Qt.PointingHandCursor
-                    onClicked: {
-                        sleepProcess.running = true
-                    }
-                }
-
-                Icons {
-                    anchors.centerIn: parent
-                    name: "weather-clear-night"
-                    size: 40
-                    iconColor: sleepArea.containsMouse ? secondary: primary
-                }
-
-                Behavior on color {
-                ColorAnimation {
-                    duration: 300
-                }
-            }
-
-          }
-        
 
         Rectangle {
-            id: shutdownButton
-            color: shutdownArea.containsMouse ? '#9aff0000': "transparent"
+            id: sleepButton
+            color: sleepArea.containsMouse ? primary: "transparent"
             Layout.leftMargin: 15
             Layout.rightMargin: 15
+            Layout.fillWidth: true
+            height: 70
             radius: 20
 
             MouseArea {
-                id: shutdownArea
+                id: sleepArea
                 anchors.fill: parent
                 hoverEnabled: true
                 cursorShape: Qt.PointingHandCursor
                 onClicked: {
-                    shutdownProcess.running = true
+                    sleepProcess.running = true
                 }
             }
 
-
-            Layout.fillWidth: true
-            height: 70
-
             Icons {
                 anchors.centerIn: parent
-                name: "system-shutdown-panel"
-                iconColor: shutdownArea.containsMouse ? "#fff": "red"
-                size: 50
+                name: "weather-clear-night"
+                size: 40
+                iconColor: sleepArea.containsMouse ? secondary: primary
             }
 
             Behavior on color {
@@ -155,31 +118,35 @@ PopupWindow {
                 duration: 300
             }
         }
+
     }
 
+
     Rectangle {
-        id: restartButton
-        color: restartArea.containsMouse ? primary: "transparent"
+        id: shutdownButton
+        color: shutdownArea.containsMouse ? '#9aff0000': "transparent"
         Layout.leftMargin: 15
         Layout.rightMargin: 15
-        Layout.fillWidth: true
-        height: 70
         radius: 20
 
         MouseArea {
-            id: restartArea
+            id: shutdownArea
             anchors.fill: parent
             hoverEnabled: true
             cursorShape: Qt.PointingHandCursor
             onClicked: {
-                restartProcess.running = true
+                shutdownProcess.running = true
             }
         }
 
+
+        Layout.fillWidth: true
+        height: 70
+
         Icons {
             anchors.centerIn: parent
-            name: "system-restart-panel"
-            iconColor: restartArea.containsMouse ? secondary: primary
+            name: "system-shutdown-panel"
+            iconColor: shutdownArea.containsMouse ? "#fff": "red"
             size: 50
         }
 
@@ -188,6 +155,39 @@ PopupWindow {
             duration: 300
         }
     }
+}
+
+Rectangle {
+    id: restartButton
+    color: restartArea.containsMouse ? primary: "transparent"
+    Layout.leftMargin: 15
+    Layout.rightMargin: 15
+    Layout.fillWidth: true
+    height: 70
+    radius: 20
+
+    MouseArea {
+        id: restartArea
+        anchors.fill: parent
+        hoverEnabled: true
+        cursorShape: Qt.PointingHandCursor
+        onClicked: {
+            restartProcess.running = true
+        }
+    }
+
+    Icons {
+        anchors.centerIn: parent
+        name: "system-restart-panel"
+        iconColor: restartArea.containsMouse ? secondary: primary
+        size: 50
+    }
+
+    Behavior on color {
+    ColorAnimation {
+        duration: 300
+    }
+}
 }
 }
 

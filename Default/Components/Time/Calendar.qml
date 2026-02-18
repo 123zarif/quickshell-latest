@@ -59,8 +59,9 @@ ColumnLayout {
             }
         }
 
-        width: parent.width
-        implicitHeight: dayList.Layout.preferredHeight + datesGrid.Layout.preferredHeight + info.implicitHeight + 20
+
+        Layout.preferredWidth: parent.width
+        Layout.preferredHeight: dayList.Layout.preferredHeight + datesGrid.Layout.preferredHeight + info.implicitHeight + 20
 
         RowLayout {
             id: info
