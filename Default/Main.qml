@@ -23,6 +23,9 @@ Item {
                 }
             }
 
+
+            NotificationCard {}
+
             LazyLoader {
                 loading: false
                 active: launcherWidgetVisible
