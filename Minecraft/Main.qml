@@ -8,6 +8,7 @@ Item {
     property bool launcherWidgetVisible: false
         property bool themeWidgetVisible: false
 
+
             GlobalShortcut {
                 name: "launcher_widget"
                 description: "Toggles the launcher widget"
@@ -39,15 +40,7 @@ Item {
                     model: Quickshell.screens
 
                     delegate: Component {
-                        PanelWindow {
-                            anchors {
-                                top: true
-                                left: true
-                                right: true
-                            }
-                            implicitHeight: 40
-
-                        }
+                        Panel {}
                     }
 
                 }

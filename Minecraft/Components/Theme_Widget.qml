@@ -37,7 +37,7 @@ PanelWindow {
 
         Process {
             id: applyWallpaper
-            command: ["sh", "-c", `awww img --transition-fps 144 --transition-step 155 --transition-type wave ${basePath}/colorSchemes/wallpapers/${themes.themes[selectedIndex].wallpaper}`]
+            command: ["hyprctl", "dispatch", "exec", `awww img --transition-fps 144 --transition-step 155 --transition-type random ${basePath}/colorSchemes/wallpapers/${themes.themes[selectedIndex].wallpaper}`]
         }
 
 
@@ -74,6 +74,8 @@ PanelWindow {
                         data += `$${key} = rgb(${color}) \n`
                     }
 
+                    applyWallpaper.running = true
+
                     hyprlandColorsJson.setText(data)
 
 
@@ -83,7 +85,6 @@ PanelWindow {
                     secondary = themes.themes[index].colors.secondary
                     light = themes.themes[index].colors.light
                     active = themes.themes[index].colors.active
-                    applyWallpaper.running = true
 
                     quickshellColorsJson.setText(JSON.stringify({
                     theme: themes.themes[index].quickshell_theme,

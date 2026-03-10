@@ -1,3 +1,4 @@
+import "../Global"
 import "./Components"
 import "./Components/Time"
 import "./Components/Media"

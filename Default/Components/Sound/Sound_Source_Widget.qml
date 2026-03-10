@@ -1,4 +1,4 @@
-import "../"
+import "../../../Global"
 
 import QtQuick
 import QtQuick.Controls

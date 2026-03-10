@@ -1,4 +1,4 @@
-import "../"
+import "../../../Global"
 
 import QtQuick
 import QtQuick.Layouts
@@ -50,7 +50,7 @@ Item {
 
                                                     Timer {
                                                         id: graceTimer
-                                                        interval: 50
+                                                        interval: 1000
                                                         running: false
                                                         repeat: false
                                                         onTriggered: {
