@@ -1,1 +1,7 @@
-{"theme":"Default","primary":"#1B1B19","secondary":"#DDDDDD","light":"#5E5E67","active":"#1B1835"}
+{
+  "theme": "Minecraft",
+  "primary": "#2B292A",
+  "secondary": "#FEEFE6",
+  "light": "#5E5E67",
+  "active": "#373328"
+}
