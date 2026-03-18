@@ -13,8 +13,6 @@ Item {
 
                 var foundIndex = themes.findIndex((theme) => theme.selected)
                 selectedIndex = (foundIndex !== -1) ? foundIndex : 0
-
-                layout.visible = true
             }
         }
     }
