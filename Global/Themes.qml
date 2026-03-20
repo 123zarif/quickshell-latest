@@ -24,8 +24,54 @@ Item {
         command: [ "hyprctl", "dispatch", "exec", `theme select -i ${selectedIndex}` ]
     }
 
-    function change()
+
+    Timer {
+        id: grace
+        interval: 1000
+        running: false
+        repeat: false
+        onTriggered: {
+            update.running = true
+        }
+    }
+
+
+    function prev()
     {
-        update.running = true
+        if (!themes || themes.length === 0) return;
+        grace.running = false
+
+        if (selectedIndex > 0)
+        {
+            themes[selectedIndex].selected = false
+            themes[selectedIndex - 1].selected = true
+            selectedIndex -= 1
+        }
+        else {
+            themes[selectedIndex].selected = false
+            themes[themes.length - 1].selected = true
+            selectedIndex = themes.length - 1
+        }
+        grace.running = true
+    }
+
+    function next()
+    {
+        if (!themes || themes.length === 0) return;
+        grace.running = false
+
+        if (selectedIndex < themes.length - 1)
+        {
+            themes[selectedIndex].selected = false
+            themes[selectedIndex + 1].selected = true
+            selectedIndex += 1
+        }
+        else {
+            themes[selectedIndex].selected = false
+            themes[0].selected = true
+            selectedIndex = 0
+        }
+        grace.running = true
+
     }
 }

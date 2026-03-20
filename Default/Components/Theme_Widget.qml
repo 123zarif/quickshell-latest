@@ -6,7 +6,6 @@ import Quickshell
 import Quickshell.Wayland
 
 PanelWindow {
-    id: themes_widget
     property var themes: [];
         property int selectedIndex: 0
 
@@ -54,40 +53,11 @@ PanelWindow {
                 focus: true
 
                 Keys.onRightPressed: {
-                    if (!themes || themes.length === 0) return;
-                    changeThemeTimer.running = false
-
-                    if (selectedIndex < themes.length - 1)
-                    {
-                        themes[selectedIndex].selected = false
-                        themes[selectedIndex + 1].selected = true
-                        selectedIndex += 1
-                    }
-                    else {
-                        themes[selectedIndex].selected = false
-                        themes[0].selected = true
-                        selectedIndex = 0
-                    }
-                    changeThemeTimer.running = true
+                    themesSetting.next()
 
                 }
-
                 Keys.onLeftPressed: {
-                    if (!themes || themes.length === 0) return;
-                    changeThemeTimer.running = false
-
-                    if (selectedIndex > 0)
-                    {
-                        themes[selectedIndex].selected = false
-                        themes[selectedIndex - 1].selected = true
-                        selectedIndex -= 1
-                    }
-                    else {
-                        themes[selectedIndex].selected = false
-                        themes[themes.length - 1].selected = true
-                        selectedIndex = themes.length - 1
-                    }
-                    changeThemeTimer.running = true
+                    themesSetting.prev()
                 }
 
 
