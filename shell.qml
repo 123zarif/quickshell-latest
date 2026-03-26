@@ -1,36 +1,52 @@
 import "./Default" as Default
+import "./Float/" as Float
+import "./Global/"
 import "./Minecraft" as Minecraft
 import QtQuick
 import Quickshell
 import Quickshell.Io
 
-
 ShellRoot {
+    id: shellroot
+
+    property string theme: Colors.theme
+    property color primary: Colors.primary
+    property color secondary: Colors.secondary
+    property color light: Colors.light
+    property color active: Colors.active
+
     FileView {
         id: colorsJson
+
         path: Qt.resolvedUrl("./persists/colors.json")
         blockLoading: true
     }
 
-    readonly property var colors: JSON.parse(colorsJson.text())
+    LazyLoader {
+        loading: false
+        active: Colors.theme === "Default"
 
+        Default.Main {
+        }
 
-    property string theme: colors.theme
-        property color primary: colors.primary
-            property color secondary: colors.secondary
-                property color light: colors.light
-                    property color active: colors.active
+    }
 
-                        LazyLoader {
-                            loading: false
-                            active: theme === "Default"
-                            Default.Main {}
-                        }
+    LazyLoader {
+        loading: false
+        active: Colors.theme === "Minecraft"
 
-                        LazyLoader {
-                            loading: false
-                            active: theme === "Minecraft"
-                            Minecraft.Main {}
-                        }
+        Minecraft.Main {
+        }
 
-                    }
+    }
+
+    LazyLoader {
+        loading: false
+        active: Colors.theme === "Float"
+
+        Float.Main {
+        }
+
+    }
+
+}

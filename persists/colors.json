@@ -1,7 +1,7 @@
 {
-  "theme": "Minecraft",
-  "primary": "#2B292A",
-  "secondary": "#FEEFE6",
-  "light": "#5E5E67",
-  "active": "#373328"
+  "theme": "Float",
+  "primary": "#373200",
+  "secondary": "#b4ad75",
+  "light": "#b3ac87",
+  "active": "#d2c5aa"
 }

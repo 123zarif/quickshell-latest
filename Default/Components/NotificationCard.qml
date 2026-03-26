@@ -16,6 +16,8 @@ PanelWindow {
 
     color: "transparent"
 
+
+
     NotificationServer {
         id: server
         bodySupported: true
@@ -39,6 +41,13 @@ ListView {
         radius: 12
         border.color: "#45475a"
         border.width: 1
+
+        Timer {
+            interval: 10000
+            running: true
+            repeat: false
+            onTriggered: modelData.dismiss()
+        }
 
         RowLayout {
             id: contentLayout

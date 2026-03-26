@@ -1,23 +1,22 @@
 import "../Global"
 import "./Components"
-
-import Quickshell
-import Quickshell.Hyprland
 import QtQuick
 import QtQuick.Layouts
+import Quickshell
+import Quickshell.Hyprland
 import Quickshell.Services.Pipewire
 
 PanelWindow {
+    id: topBar
+
     required property var modelData
 
-    id: topBar
     implicitHeight: 65
     color: "transparent"
 
     PwObjectTracker {
-        objects: [ Pipewire.defaultAudioSink ]
+        objects: [Pipewire.defaultAudioSink]
     }
-
 
     anchors {
         top: true
@@ -32,8 +31,9 @@ PanelWindow {
 
         Icons {
             id: arch
+
             name: "distributor-logo-archman"
-            iconColor: secondary
+            iconColor: Colors.secondary
             size: 20
         }
 
@@ -44,13 +44,14 @@ PanelWindow {
             Rectangle {
                 width: workspaceList.width + 20
                 height: parent.height
-                color: primary
-                border.color: light
+                color: Colors.primary
+                border.color: Colors.light
                 border.width: 0.5
                 radius: 8
 
                 ListView {
                     id: workspaceList
+
                     width: contentWidth
                     height: parent.height - 16
                     anchors.centerIn: parent
@@ -68,21 +69,31 @@ PanelWindow {
                             anchors.fill: parent
                             cursorShape: Qt.PointingHandCursor
                             onClicked: {
-                                modelData.activate()
+                                modelData.activate();
                             }
                         }
+
                         Text {
                             anchors.centerIn: parent
-                            color: modelData.active ? primary : secondary
+                            color: modelData.active ? Colors.primary : Colors.secondary
                             font.pixelSize: 15
                             text: modelData.id
                         }
+
                     }
+
                 }
+
             }
+
         }
 
-        Time {}
-        Sound {}
+        Time {
+        }
+
+        Sound {
+        }
+
     }
+
 }

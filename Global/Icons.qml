@@ -1,36 +1,33 @@
-import QtQuick
 import Qt5Compat.GraphicalEffects
+import QtQuick
 import Quickshell
 import Quickshell.Widgets
-import QtQuick.Controls
-
 
 Rectangle {
     property string name: "audio-volume-muted"
-        property color iconColor: primary
-            property bool overlay: true
-                property int size: 15
+    property color iconColor: primary
+    property bool overlay: true
+    property int size: 15
 
-                    width: size
-                    height: size
-                    color: "transparent"
+    width: size
+    height: size
+    color: "transparent"
 
-                    IconImage {
-                        id: soundImg
+    IconImage {
+        id: soundImg
 
-                        anchors.centerIn: parent
+        anchors.centerIn: parent
+        implicitSize: size
+        source: Quickshell.iconPath(name)
+    }
 
-                        implicitSize: size
-                        source: Quickshell.iconPath(name)
-                    }
+    ColorOverlay {
+        anchors.centerIn: parent
+        width: soundImg.width
+        height: soundImg.height
+        source: soundImg
+        color: iconColor
+        visible: overlay
+    }
 
-                    ColorOverlay {
-                        anchors.centerIn: parent
-                        width: soundImg.width
-                        height: soundImg.height
-                        source: soundImg
-                        color: iconColor
-
-                        visible: overlay
-                    }
-                }
+}

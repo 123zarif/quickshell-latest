@@ -1,0 +1,8 @@
+module Global
+
+# Register your Singleton
+singleton Colors 1.0 Colors.qml
+
+# Register your custom reusable components
+Themes 1.0 Themes.qml
+Icons 1.0 Icons.qml
