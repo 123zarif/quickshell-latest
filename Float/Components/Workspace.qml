@@ -27,10 +27,10 @@ Item {
     }
 
     height: workspaces.height
-    width: iconsRow.width
+    width: iconsRow.width + 15
 
     Rectangle {
-        width: iconsRow.width + 20
+        width: parent.width
         height: parent.height - 10
         anchors.centerIn: parent
         color: focused ? Colors.secondary : "transparent"
@@ -39,9 +39,17 @@ Item {
         RowLayout {
             id: iconsRow
 
-            height: parent.height
-            width: implicitWidth
+            Layout.fillHeight: true
+            Layout.preferredWidth: implicitWidth
             anchors.centerIn: parent
+
+            Text {
+                visible: modelData.toplevels.values.length < 1 ? true : false
+                text: modelData.id
+                font.pixelSize: 20
+                color: focused ? Colors.primary : Colors.secondary
+                font.family: Colors.font
+            }
 
             Repeater {
                 id: appRepeater
@@ -52,7 +60,7 @@ Item {
                     required property var modelData
 
                     text: getIcon(modelData)
-                    font.pixelSize: 20
+                    font.pixelSize: 22
                     color: focused ? Colors.primary : Colors.secondary
                     font.family: Colors.font
                 }

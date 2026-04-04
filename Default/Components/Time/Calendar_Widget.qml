@@ -13,8 +13,8 @@ PopupWindow {
         anchor.rect.x: 0
         anchor.rect.y: root.height - 10
 
-        implicitWidth: 800
-        implicitHeight: calendarContent.Layout.preferredHeight + 20
+        implicitWidth: 550
+        implicitHeight: calendarContent.height + 20
         visible: showWidget
         color: "transparent"
 
@@ -73,12 +73,9 @@ PopupWindow {
             }
         }
 
-        RowLayout {
-            anchors.fill: parent
-            Calendar {
-                id: calendarContent
-            }
-            Events {}
+
+        Calendar {
+            id: calendarContent
         }
     }
 }
