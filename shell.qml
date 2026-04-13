@@ -10,43 +10,44 @@ ShellRoot {
     id: shellroot
 
     property string theme: Colors.theme
-    property color primary: Colors.primary
-    property color secondary: Colors.secondary
-    property color light: Colors.light
-    property color active: Colors.active
+        property color primary: Colors.primary
+            property color secondary: Colors.secondary
+                property color light: Colors.light
+                    property color active: Colors.active
+                        property string font: "JetBrains Mono Nerd Font"
 
-    FileView {
-        id: colorsJson
+                            FileView {
+                                id: colorsJson
 
-        path: Qt.resolvedUrl("./persists/colors.json")
-        blockLoading: true
-    }
+                                path: Qt.resolvedUrl("./persists/colors.json")
+                                blockLoading: true
+                            }
 
-    LazyLoader {
-        loading: false
-        active: Colors.theme === "Default"
+                            LazyLoader {
+                                loading: false
+                                active: Colors.theme === "Default"
 
-        Default.Main {
-        }
+                                Default.Main {
+                                }
 
-    }
+                            }
 
-    LazyLoader {
-        loading: false
-        active: Colors.theme === "Minecraft"
+                            LazyLoader {
+                                loading: false
+                                active: Colors.theme === "Minecraft"
 
-        Minecraft.Main {
-        }
+                                Minecraft.Main {
+                                }
 
-    }
+                            }
 
-    LazyLoader {
-        loading: false
-        active: Colors.theme === "Float"
+                            LazyLoader {
+                                loading: false
+                                active: Colors.theme === "Float"
 
-        Float.Main {
-        }
+                                Float.Main {
+                                }
 
-    }
+                            }
 
-}
+                        }

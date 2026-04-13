@@ -61,8 +61,32 @@ PanelWindow {
             }
 
             Rectangle {
-                id: conatiner
+                Layout.preferredWidth: special_row.width + 20
+                radius: 200
+                Layout.fillHeight: true
+                color: Colors.primary
+                border.width: 2
+                border.color: secondary
 
+                RowLayout {
+                    id: special_row
+                    width: implicitWidth
+                    height: parent.height
+                    anchors.centerIn: parent
+
+                    Repeater {
+                        model: Hyprland.workspaces.values.filter(itm => itm.id < 0)
+
+
+                        delegate: Workspace {
+                        }
+                    }
+                }
+            }
+
+
+
+            Rectangle {
                 Layout.preferredWidth: row.width + 50
                 radius: 200
                 Layout.fillHeight: true
@@ -77,39 +101,18 @@ PanelWindow {
                     height: parent.height
                     spacing: 25
 
-                    ListView {
-                        id: workspaces
-
-                        interactive: false
-                        orientation: ListView.Horizontal
+                    RowLayout {
                         spacing: 10
                         Layout.preferredWidth: contentWidth
                         Layout.fillHeight: true
-                        model: {
-                            let wsArray = Hyprland.workspaces.values.slice();
-                            return wsArray.sort((a, b) => {
-                                if (a.id > 0 && b.id < 0)
-                                    return -1;
 
-                                if (a.id < 0 && b.id > 0)
-                                    return 1;
+                        Repeater {
+                            model: Hyprland.workspaces.values.filter(itm => itm.id >= 0)
 
-                                return a.id - b.id;
-                            });
-                        }
 
-                        delegate: Workspace {
-                        }
-
-                        // Animate implicitWidth instead!
-                        Behavior on implicitWidth {
-                            NumberAnimation {
-                                duration: 100
-                                easing.type: Easing.InOutQuad
+                            delegate: Workspace {
                             }
-
                         }
-
                     }
 
                     Text {
@@ -125,41 +128,41 @@ PanelWindow {
 
                     Repeater {
                         model: Mpris.players.values.filter((itm) => {
-                            return itm.identity == "Spotify";
-                        })
+                        return itm.identity == "Spotify";
+                    })
 
-                        Text {
-                            id: media
+                    Text {
+                        id: media
 
-                            font.strikeout: true
-                            Layout.alignment: Qt.AlignCenter
-                            text: "\uf1bc" + " " + modelData.trackTitle
-                            font.pixelSize: 16
-                            color: Colors.secondary
-                            font.bold: true
-                            font.family: Colors.font
-                        }
-
-                    }
-
-                }
-
-                Behavior on width {
-                    NumberAnimation {
-                        duration: 100
-                        easing.type: Easing.InOutQuad
+                        font.strikeout: true
+                        Layout.alignment: Qt.AlignCenter
+                        text: "\uf1bc" + " " + modelData.trackTitle
+                        font.pixelSize: 16
+                        color: Colors.secondary
+                        font.bold: true
+                        font.family: Colors.font
                     }
 
                 }
 
             }
 
-            Item {
-                Layout.fillWidth: true
+            Behavior on Layout.preferredWidth {
+            NumberAnimation {
+                duration: 200
+                easing.type: Easing.OutExpo // Fast start, very smooth slow down
+                easing.overshoot: 1.2
             }
-
         }
 
     }
+
+    Item {
+        Layout.fillWidth: true
+    }
+
+}
+
+}
 
 }

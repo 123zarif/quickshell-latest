@@ -4,69 +4,88 @@ import QtQuick.Layouts
 import Quickshell
 
 Item {
-    property bool focused: modelData.focused
+    property bool focused: {
+        if (modelData.id >= 0)
+        {
+            modelData.focused
+        }
+        else
+        {
+            Hyprland.monitors.some(m => m.activeSpecialWorkspace?.id === modelData.id) }
+        }
 
-    function getIcon(appClass) {
-        let name = (appClass.wayland.appId || "").toLowerCase();
-        if (name.includes("brave"))
-            return "\udb80\ude39";
 
-        if (appClass.title.includes("nvim") || name.includes("code"))
-            return "\uf121";
 
-        if (name.includes("kitty"))
-            return "\uf120";
+        function getIcon(appClass)
+        {
+            let name = (appClass.wayland.appId || "").toLowerCase();
+            if (name.includes("brave"))
+                return "\udb80\ude39";
 
-        if (name.includes("discord") || name.includes("vesktop"))
-            return "\uf1ff";
+            if (appClass.title.includes("nvim") || name.includes("code"))
+                return "\uf121";
 
-        if (name.includes("spotify"))
-            return "\uf1bc";
+            if (name.includes("kitty"))
+                return "\uf120";
 
-        return "\uf444";
-    }
+            if (name.includes("discord") || name.includes("vesktop"))
+                return "\uf1ff";
 
-    height: workspaces.height
-    width: iconsRow.width + 15
+            if (name.includes("spotify"))
+                return "\uf1bc";
 
-    Rectangle {
-        width: parent.width
-        height: parent.height - 10
-        anchors.centerIn: parent
-        color: focused ? Colors.secondary : "transparent"
-        radius: 200
+            return "\uf444";
+        }
 
-        RowLayout {
-            id: iconsRow
 
-            Layout.fillHeight: true
-            Layout.preferredWidth: implicitWidth
+        Layout.fillHeight: true
+        Layout.preferredWidth: focused ? iconsRow.width + 60 : iconsRow.width + 15
+
+        Rectangle {
+            width: parent.width - 10
+            height: parent.height - 12
             anchors.centerIn: parent
+            color: focused ? secondary : "transparent"
+            radius: 200
 
-            Text {
-                visible: modelData.toplevels.values.length < 1 ? true : false
-                text: modelData.id
-                font.pixelSize: 20
-                color: focused ? Colors.primary : Colors.secondary
-                font.family: Colors.font
-            }
+            RowLayout {
+                id: iconsRow
 
-            Repeater {
-                id: appRepeater
+                Layout.fillHeight: true
+                Layout.preferredWidth: implicitWidth
+                anchors.centerIn: parent
+                spacing: 15
 
-                model: modelData ? modelData.toplevels : null
+                Text {
+                    visible: modelData.toplevels.values.length < 1 ? true : false
+                    text: modelData.id
+                    font.pixelSize: 20
+                    color: focused ? primary : Colors.secondary
+                    font.family: font
+                }
 
-                delegate: Text {
-                    required property var modelData
+                Repeater {
+                    id: appRepeater
 
-                    text: getIcon(modelData)
-                    font.pixelSize: 22
-                    color: focused ? Colors.primary : Colors.secondary
-                    font.family: Colors.font
+                    model: modelData ? modelData.toplevels : null
+
+                    delegate: Text {
+                        required property var modelData
+
+                        text: getIcon(modelData)
+                        font.pixelSize: 22
+                        color: focused ? Colors.primary : Colors.secondary
+                        font.family: Colors.font
+                    }
+
                 }
 
             }
-
+            Behavior on width {
+            SpringAnimation {
+                spring: 3.0   // How strongly it pulls toward the target width (higher = faster)
+                damping: 0.1  // How much it bounces (lower = more bounce)
+            }
         }
 
     }

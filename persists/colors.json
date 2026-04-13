@@ -1,7 +1,7 @@
 {
-  "theme": "Default",
-  "primary": "#381e71",
-  "secondary": "#b6a2d7",
-  "light": "#b4a5c8",
-  "active": "#a87ed5"
+  "theme": "Float",
+  "primary": "#373200",
+  "secondary": "#b4ad75",
+  "light": "#b3ac87",
+  "active": "#d2c5aa"
 }
