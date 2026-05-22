@@ -79,6 +79,7 @@ PanelWindow {
 
 
                         delegate: Workspace {
+
                         }
                     }
                 }
@@ -103,7 +104,6 @@ PanelWindow {
 
                     RowLayout {
                         spacing: 10
-                        Layout.preferredWidth: contentWidth
                         Layout.fillHeight: true
 
                         Repeater {
