@@ -43,7 +43,7 @@ PanelWindow {
 
         Rectangle {
             anchors.fill: parent
-            color: Qt.rgba(0.05, 0.05, 0.06, 0.8)
+            color: Qt.rgba(0.12, 0.12, 0.15, 0.8)
 
             focus: true
 

@@ -47,7 +47,7 @@ PanelWindow {
 
         exclusionMode: ExclusionMode.Ignore
         focusable: true
-        color: '#8e000000'
+        color: '#28000000'
 
         anchors {
             bottom: true

@@ -13,7 +13,7 @@ PanelWindow {
     required property var modelData
 
     color: "transparent"
-    implicitHeight: 65
+    implicitHeight: 52
 
     anchors {
         top: true
@@ -29,8 +29,8 @@ PanelWindow {
 
     Item {
         width: parent.width
-        anchors.centerIn: parent
-        height: parent.height - 25
+        anchors.bottom: parent.bottom
+        height: parent.height - 10
 
         RowLayout {
             width: screen.width
@@ -61,7 +61,7 @@ PanelWindow {
             }
 
             Rectangle {
-                Layout.preferredWidth: special_row.width + 20
+                Layout.preferredWidth: special_row.width + 23
                 radius: 200
                 Layout.fillHeight: true
                 color: Colors.primary
@@ -73,6 +73,8 @@ PanelWindow {
                     width: implicitWidth
                     height: parent.height
                     anchors.centerIn: parent
+
+                    spacing: 6
 
                     Repeater {
                         model: Hyprland.workspaces.values.filter(itm => itm.id < 0)
@@ -88,7 +90,7 @@ PanelWindow {
 
 
             Rectangle {
-                Layout.preferredWidth: row.width + 50
+                Layout.preferredWidth: row.width + 30
                 radius: 200
                 Layout.fillHeight: true
                 color: Colors.primary

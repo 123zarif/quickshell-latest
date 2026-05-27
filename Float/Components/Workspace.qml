@@ -45,7 +45,7 @@ Item {
 
 
     Layout.fillHeight: true
-    Layout.preferredWidth: focused ? iconsRow.width + 60 : iconsRow.width + 15
+    Layout.preferredWidth: focused ? iconsRow.width + 55 : iconsRow.width + 35
 
     MouseArea {
         anchors.fill: parent
@@ -56,10 +56,10 @@ Item {
     }
 
     Rectangle {
-        width: parent.width - 10
-        height: parent.height - 12
+        width: parent.width
+        height: parent.height - 15
         anchors.centerIn: parent
-        color: focused ? secondary : "transparent"
+        color: focused ? secondary : Qt.alpha(secondary, 0.3)
         radius: 200
 
         RowLayout {
@@ -68,13 +68,13 @@ Item {
             Layout.fillHeight: true
             Layout.preferredWidth: implicitWidth
             anchors.centerIn: parent
-            spacing: 15
+            spacing: 20
 
             Text {
                 visible: modelData.toplevels.values.length < 1 ? true : false
                 text: modelData.id
-                font.pixelSize: 20
-                color: focused ? primary : Colors.secondary
+                font.pixelSize: 19
+                color: focused ? primary : secondary
                 font.family: Colors.font
             }
 
@@ -87,18 +87,19 @@ Item {
                     required property var modelData
 
                     text: getIcon(modelData)
-                    font.pixelSize: 22
-                    color: focused ? Colors.primary : Colors.secondary
+                    font.pixelSize: 19
+                    color: focused ? Colors.primary : Qt.tint("#FFFFFF", Qt.alpha(primary, 0.2))
                     font.family: Colors.font
                 }
 
             }
 
         }
+
         Behavior on width {
-        SpringAnimation {
-            spring: 3.0   // How strongly it pulls toward the target width (higher = faster)
-            damping: 0.1  // How much it bounces (lower = more bounce)
+        NumberAnimation {
+            duration: 300
+            easing.type: Easing.OutExpo
         }
     }
 
