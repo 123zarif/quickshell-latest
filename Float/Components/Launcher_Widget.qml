@@ -47,7 +47,7 @@ PanelWindow {
 
         exclusionMode: ExclusionMode.Ignore
         focusable: true
-        color: "transparent"
+        color: '#8e000000'
 
         anchors {
             bottom: true
@@ -76,7 +76,7 @@ PanelWindow {
                 width: parent.width
                 height: mainLayout.implicitHeight + 20
                 color: Qt.rgba(0.05, 0.05, 0.06, 0.8)
-                border.color: Qt.rgba(1.0, 1.0, 1.0, 0.2)
+                border.color: Qt.rgba(1, 1, 1, 0.32)
                 border.width: 1.5
                 radius: 30
                 clip: true
@@ -152,6 +152,9 @@ PanelWindow {
                             launcherWidgetVisible = false
                             sortedList[crrIndex].execute()
                         }
+                    }
+                    Keys.onEscapePressed: {
+                        launcherWidgetVisible = false
                     }
 
                     font.pixelSize: 24

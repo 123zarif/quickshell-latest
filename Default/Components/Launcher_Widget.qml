@@ -20,6 +20,7 @@ PanelWindow {
             ]
 
 
+            exclusionMode: ExclusionMode.Ignore
             Component.onCompleted: {
                 if (this.WlrLayershell != null)
                 {
@@ -39,8 +40,7 @@ PanelWindow {
                 bottom: true
             }
 
-            implicitHeight: screen.height
-            implicitWidth: screen.width
+
 
 
             function filterApps ()

@@ -47,10 +47,8 @@ PanelWindow {
 
             focus: true
 
-            // 3. THE KEY LISTENERS
             Keys.onLeftPressed: (event) => {
             selectedIndex = (selectedIndex <= 0) ? 3 : selectedIndex - 1
-
             event.accepted = true
         }
 
@@ -58,16 +56,23 @@ PanelWindow {
         selectedIndex = (selectedIndex >= 3) ? 0 : selectedIndex + 1
         event.accepted = true
     }
+    Keys.onReturnPressed: (event) => {
+    if (selectedIndex == 0) sleepProcess.running = true
+    if (selectedIndex == 1) lockProcess.running = true
+    if (selectedIndex == 2) shutdownProcess.running = true
+    if (selectedIndex == 3) restartProcess.running = true
+    event.accepted = true
+}
 
-    RowLayout {
-        anchors.fill: parent
+RowLayout {
+    anchors.fill: parent
 
-        System_Item {index: 0; title: "Sleep"; icon_name: "\udb82\udd04" }
-        System_Item {index: 1; title: "Lock"; icon_name: "\udb80\udf3e" }
-        System_Item {index: 2; title: "Shut Down"; icon_name: "\u23fb" }
-        System_Item {index: 3; title: "Restart"; icon_name: "\udb81\udf09" }
+    System_Item {index: 0; title: "Sleep"; icon_name: "\udb82\udd04" }
+    System_Item {index: 1; title: "Lock"; icon_name: "\udb80\udf3e" }
+    System_Item {index: 2; title: "Shut Down"; icon_name: "\u23fb" }
+    System_Item {index: 3; title: "Restart"; icon_name: "\udb81\udf09" }
 
-    }
+}
 }
 
 

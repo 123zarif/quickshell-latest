@@ -99,7 +99,7 @@ PanelWindow {
                                     Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
                                 }
                                 Image {
-                                    source: "/home/zarif/.config/colorSchemes/wallpapers/" + modelData.wallpaper
+                                    source: Quickshell.env("HOME") + "/.config/colorSchemes/wallpapers/" + modelData.wallpaper
                                     Layout.fillWidth: true
                                     Layout.fillHeight: true
                                     fillMode: Image.PreserveAspectCrop
