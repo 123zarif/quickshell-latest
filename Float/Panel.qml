@@ -60,6 +60,7 @@ PanelWindow {
 
             }
 
+
             Rectangle {
                 Layout.preferredWidth: special_row.width + 23
                 radius: 200
@@ -102,7 +103,7 @@ PanelWindow {
 
                     anchors.centerIn: parent
                     height: parent.height
-                    spacing: 25
+                    spacing: 10
 
                     RowLayout {
                         spacing: 10
@@ -136,34 +137,63 @@ PanelWindow {
                     Text {
                         id: media
 
-                        font.strikeout: true
-                        Layout.alignment: Qt.AlignCenter
-                        text: "\uf1bc" + " " + modelData.trackTitle
-                        font.pixelSize: 16
-                        color: Colors.secondary
-                        font.bold: true
-                        font.family: Colors.font
+                        MouseArea {
+                            anchors.fill: parent
+
+                            cursorShape: Qt.PointingHandCursor
+
+                            onClicked: {
+                                if (modelData?.canTogglePlaying) modelData.togglePlaying()
+                                    }
+                            }
+
+                            font.strikeout: !modelData.isPlaying
+                            Layout.alignment: Qt.AlignCenter
+                            text: " " + "\uf1bc" + " " + modelData.trackTitle + " "
+                            font.pixelSize: 16
+                            color: Colors.secondary
+                            font.bold: true
+                            font.family: Colors.font
+                        }
+
                     }
+
+                    Cava {}
 
                 }
 
+
+                Behavior on Layout.preferredWidth {
+                NumberAnimation {
+                    duration: 200
+                    easing.type: Easing.OutExpo
+                    easing.overshoot: 1.2
+                }
             }
 
-            Behavior on Layout.preferredWidth {
-            NumberAnimation {
-                duration: 200
-                easing.type: Easing.OutExpo // Fast start, very smooth slow down
-                easing.overshoot: 1.2
-            }
+
+        }
+
+        // Rectangle {
+        //     Layout.preferredWidth: visualizer.implicitWidth + 30
+        //     radius: 200
+        //     Layout.fillHeight: true
+        //     color: Colors.primary
+        //     border.width: 2
+        //     border.color: secondary
+
+
+        //     Cava {
+        //         id: visualizer
+        //     }
+
+        // }
+
+        Item {
+            Layout.fillWidth: true
         }
 
     }
-
-    Item {
-        Layout.fillWidth: true
-    }
-
-}
 
 }
 

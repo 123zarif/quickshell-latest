@@ -39,6 +39,8 @@ Item {
 
         if (name.includes("spotify"))
             return "\uf1bc";
+        if (name.includes("obs"))
+            return "\uf03d";
 
         return "\uf444";
     }
