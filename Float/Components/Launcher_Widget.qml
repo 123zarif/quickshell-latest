@@ -12,6 +12,7 @@ PanelWindow {
 
     property int crrIndex: 0
         property string crrText: ""
+            ListModel { id: filteredModel }
             property var sortedList: []
             property var sorts: [
             {name: "All", active: false, formula: function (data) { return true }},
@@ -19,31 +20,75 @@ PanelWindow {
             {name: "Desktop Apps", active: true, formula: function (data) { return (!(data.categories.includes("X-WayDroid-App") && !data.categories.includes("Utility"))) }}
             ]
 
-
-            function filterApps ()
+            function filterApps()
             {
-                if (crrText === "")
+
+                let allApps = DesktopEntries.applications.values;
+                let matches = [];
+
+
+                // 1. Gather all actual matching application objects
+                if (crrText !== "")
                 {
-                    sortedList = []
-                    return true;
-                }
-                sortedList = DesktopEntries.applications.values.filter(itm => {
+                    for (let i = 0; i < allApps.length; i++) {
+                        let itm = allApps[i];
+                        if (!itm.name.toLowerCase().includes(crrText)) continue;
 
+                        let passesCategory = true;
+                        for (let s = 0; s < sorts.length; s++) {
+                            if (sorts[s].active && !sorts[s].formula(itm))
+                            {
+                                passesCategory = false;
+                                break;
+                            }
+                        }
 
-                let matchesSearch = itm.name.toLowerCase().includes(crrText);
-                if (!matchesSearch) return false;
-
-                for (var i = 0; i < sorts.length; i++) {
-                    if (sorts[i].active)
-                    {
-                        let check = sorts[i].formula(itm)
-                        if (!check) return false;
+                        if (passesCategory)
+                        {
+                            matches.push(itm);
+                        }
                     }
                 }
-                return true;
-            })
-        }
 
+                // 2. Remove items from the visual list that no longer match the search
+                for (let i = filteredModel.count - 1; i >= 0; i--) {
+                    let modelApp = filteredModel.get(i).app;
+                    if (!matches.includes(modelApp))
+                    {
+                        filteredModel.remove(i, 1);
+                    }
+                }
+
+                // 3. Insert or Move matching items into their correct visual positions
+                for (let i = 0; i < matches.length; i++) {
+                    let targetApp = matches[i];
+
+                    // If the item is already exactly where it should be, skip it
+                    if (i < filteredModel.count && filteredModel.get(i).app === targetApp)
+                    {
+                        continue;
+                    }
+
+                    // Check if the item exists further down the list
+                    let foundIndex = -1;
+                    for (let j = i + 1; j < filteredModel.count; j++) {
+                        if (filteredModel.get(j).app === targetApp)
+                        {
+                            foundIndex = j;
+                            break;
+                        }
+                    }
+
+                    if (foundIndex !== -1)
+                    {
+                        // It exists, move it upward! (This naturally triggers the 'displaced' transition)
+                        filteredModel.move(foundIndex, i, 1);
+                    } else {
+                    // It's a brand new match, insert it! (This triggers the 'add' transition)
+                    filteredModel.insert(i, { "app": targetApp });
+                }
+            }
+        }
 
         exclusionMode: ExclusionMode.Ignore
         focusable: true
@@ -105,7 +150,7 @@ PanelWindow {
 
             Behavior on height {
             NumberAnimation {
-                duration: 350
+                duration: 250
                 easing.type: Easing.InOutQuad
             }
         }
@@ -143,14 +188,15 @@ PanelWindow {
                         if (crrIndex > 0) crrIndex -= 1
                     }
                     Keys.onDownPressed: {
-                        if (sortedList.length > crrIndex + 1) crrIndex += 1
+                        if (filteredModel.count > crrIndex + 1) crrIndex += 1
                     }
 
                     Keys.onReturnPressed: {
-                        if (sortedList.length > 0)
+                        if (filteredModel.count > 0)
                         {
                             launcherWidgetVisible = false
-                            sortedList[crrIndex].execute()
+                            // Call execute() directly on the stored object
+                            filteredModel.get(crrIndex).app.execute()
                         }
                     }
                     Keys.onEscapePressed: {
@@ -189,48 +235,85 @@ PanelWindow {
             ListView {
                 id: launcherList
 
+                // 1. Create a property to calculate the height we WANT to be
+                property real targetHeight: Math.min(contentHeight, 550)
+
+                // 2. Bind the layout's actual height to our new property
                 Layout.fillWidth: true
-                Layout.preferredHeight: Math.min(contentHeight, 550)
+                Layout.preferredHeight: targetHeight
 
-                visible: sortedList.length > 0
-
-                spacing: 3
-                currentIndex: crrIndex
-                highlightMoveDuration: 300
-                clip: true
-                model: sortedList
-
-
-                delegate: Rectangle {
-                    height: 65
-                    width: launcherList.width
-                    color: crrIndex == index ? "#4D88C0D0" : "transparent"
-                    radius: 16
-
-                    RowLayout {
-                        spacing: 10
-                        anchors.verticalCenter: parent.verticalCenter
-
-                        IconImage {
-                            Layout.alignment: Qt.AlignCenter | Qt.AlignVCenter
-                            implicitSize: 40
-                            source: Quickshell.iconPath(modelData.icon)
-                            Layout.leftMargin: 10
-                        }
-
-                        Text {
-                            text: modelData.name
-                            font.pixelSize: 20
-                            font.weight: 900
-                            font.family: Colors.font
-                            color: crrIndex == index ? "#88C0D0" : "#F2F4F8"
-                        }
-                    }
+                // 3. Animate this property to match the 'displaced' transition EXACTLY
+                Behavior on targetHeight {
+                NumberAnimation {
+                    duration: 250
+                    easing.type: Easing.OutQuart
                 }
             }
 
+            visible: filteredModel.count > 0
+            spacing: 3
+            currentIndex: crrIndex
+            highlightMoveDuration: 300
+            clip: true
+            model: filteredModel
+
+            displaced: Transition {
+                NumberAnimation {
+                    properties: "x, y"
+                    duration: 250
+                    easing.type: Easing.OutQuart
+                }
+            }
+
+            add: Transition {
+                NumberAnimation {
+                    property: "opacity"
+                    from: 0
+                    to: 1
+                    duration: 200
+                }
+            }
+
+            remove: Transition {
+                NumberAnimation {
+                    property: "opacity"
+                    to: 0
+                    duration: 150
+                }
+            }
+
+            delegate: Rectangle {
+                height: 65
+                width: launcherList.width
+                color: crrIndex == index ? "#4D88C0D0" : "transparent"
+                radius: 16
+
+                RowLayout {
+                    spacing: 10
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    IconImage {
+                        Layout.alignment: Qt.AlignCenter | Qt.AlignVCenter
+                        implicitSize: 40
+                        // Access the icon straight from the model's stored app object
+                        source: Quickshell.iconPath(model.app.icon)
+                        Layout.leftMargin: 10
+                    }
+
+                    Text {
+                        // Access the name straight from the model's stored app object
+                        text: model.app.name
+                        font.pixelSize: 20
+                        font.weight: 900
+                        font.family: Colors.font
+                        color: crrIndex == index ? "#88C0D0" : "#F2F4F8"
+                    }
+                }
+            }
         }
+
     }
+}
 
 }
 }

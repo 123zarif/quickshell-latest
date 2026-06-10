@@ -131,7 +131,7 @@ PanelWindow {
 
                     Repeater {
                         model: Mpris.players.values.filter((itm) => {
-                        return itm.identity == "Spotify";
+                        return itm.identity == "Spotify" || itm.identity == "Spotifyd";
                     })
 
                     Text {
