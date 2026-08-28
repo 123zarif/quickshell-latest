@@ -28,6 +28,9 @@ Item {
         if (name.includes("brave"))
             return "\udb80\ude39";
 
+        if (name.includes("spotify") || name == "spotatui")
+            return "\uf1bc";
+
         if (appClass.title.includes("nvim") || name.includes("code"))
             return "\uf121";
 
@@ -37,10 +40,9 @@ Item {
         if (name.includes("discord") || name.includes("vesktop"))
             return "\uf1ff";
 
-        if (name.includes("spotify"))
-            return "\uf1bc";
         if (name.includes("obs"))
             return "\uf03d";
+
 
         return "\uf444";
     }

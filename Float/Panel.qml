@@ -122,7 +122,7 @@ PanelWindow {
                         id: time
 
                         Layout.alignment: Qt.AlignCenter
-                        text: Qt.formatDateTime(clock.date, "hh:mm AP | MMM dd")
+                        text: Qt.formatDateTime(clock.date, "hh:mm AP | ddd, MMM dd")
                         font.pixelSize: 16
                         color: Colors.secondary
                         font.bold: true
